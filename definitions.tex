@@ -1,0 +1,188 @@
+\newcommand{\dia}{\today}
+\newcommand{\autor}{João Paulo Rodrigues de Andrade}
+\newcommand{\orientador}{Darlan Karlo Elisiário de Carvalho}
+\newcommand{\titulo}{Aplicação do método Multinível Algébrico Dinâmico Não Uniforme (NU-ADM) no escoamento composicional em reservatórios de petróleo.}
+\newcommand{\instituicao}{Universidade Federal de Pernambuco}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% novos comandos
+\let\divsymb=\div % rename builtin command \div to \divsymb
+\newcommand{\gv}[1]{\ensuremath{\mbox{\boldmath$ #1 $}}}
+\renewcommand{\div}[1]{\gv{\vec{\nabla}} \cdot #1} % for divergence
+\newcommand{\pd}[2]{\frac{\partial #1}{\partial #2}}
+\newcommand{\grad}[1]{\gv{\nabla} #1} % for gradient
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\def \perm{K}
+\def \poroVolume{V_{p}}
+\def \totalVolume{V_{b}}
+% \def \permTensor{\undertilde{K}}
+\def \permTensor{\underline{\underline{K}}}
+\def \Volume{V}
+\def \velocity{\vec{v}}
+\def \permRel{kr}
+\def \phase{j}
+\def \pressure{P}
+\def \density{\rho}
+\def \viscosity{\mu}
+\def \milidarcy{md}
+\def \gravity{g}
+\def \permEff{k_{ef}}
+\def \permAbs{K_{abs}}
+\def \sourceTerm{Q}
+\def \normalVec{\vec{n}}
+\def \volumeSurface{\Gamma_{V}}
+\def \faceVolume{L}
+\def \normalVersor{\hat{n}} %remover
+\def \Area{A}
+\def \component{k}
+\def \molNumber{n}
+\def \molNumberComponent{\molNumber_{\component}} %remover
+\def \globalMolarFraction{z}
+\def \timme{t}
+\def \bulkVolume{V_{b}}
+\def \numberOfPhases{N_{\phase}}
+\def \numberOfComponents{N_{c}}
+\def \molarPartialFrac{x}
+\def \altura{D}
+\def \molarDensity{\xi}
+\def \molarDensityPhase{\xi_{\phase}} %remover
+\def \molarDensityComponent{\molarDensity_{\component}}  %remover
+\def \mSourceTerm{q}
+\def \totalFluidVolume{V_{t}}
+\def \porosidadeIni{\porosidade^{0}}
+\def \rockCompress{c_{f}}
+\def \pressureIni{\pressure_{f}}
+\def \aComponent{a_{\component}} %remover
+\def \aPhase{a_{\phase}} % remover
+\def \alphaComponent{\alpha_{\component}} %remover
+\def \bComponent{b_{\component}} %remover
+\def \bPhase{b_{\phase}} %remover
+\def \componentt{\component_{1}} %%remover
+\def \componenttt{\component_{2}} %%remover
+\def \molarVolume{v}
+\def \molarphaseVolume{\molarVolume_{\phase}} %remover
+\def \molarVolumeComponent{\molarVolume_{\component}}  %remover
+\def \rConstant{R}
+\def \temperature{T}
+\def \Joule{J}
+\def \mol{mol}
+\def \m3{m^{3}}
+\def \binaryInter{\kappa}
+\def \omegaA{\Omega_{a}} %remover
+\def \omegaB{\Omega_{b}} %remover
+\def \Critical{c}
+\def \criticalT{\temperature_{\Critical}}
+\def \criticalTComponent{\temperature_{\Critical \component}} %% remover
+\def \criticalP{\pressure_{\Critical}}
+\def \criticalPComponent{\pressure_{\Critical \component}} %remover
+\def \criticalV{\Volume_{\Critical}}
+\def \crititicalVComponent{\Volume_{\Critical \component}} %remover
+\def \criticalMolarDensity{\molarDensity_{\Critical}}
+\def \criticalMolarDensityPhase{\molarDensity_{\Critical \phase}} %remover
+\def \malphaComp{\gamma_{\component}} %remover
+\def \acentricFator{\omega}
+\def \acentricFatorComponent{\acentricFator_{\component}}
+\def \Zfactor{Z}
+\def \ZfactorPhase{\Zfactor_{\phase}} % remover
+\def \BPhase{B_{\phase}} %remover
+\def \APhase{A_{\phase}} % remover
+\def \fugacity{f_{\component \phase}}
+\def \coefFugacity{\varphi}
+\def \Saturation{S}
+\def \oilPhase{o} % remover
+\def \waterPhase{w} %remover
+\def \gasPhase{g} %remover
+\def \MolecularWeight{W}
+\def \MolecularWeightComponent{\MolecularWeight_{\component}} % remover
+\def \MolecularWeightPhase{\MolecularWeight_{\phase}} %remover
+\def \viscosityComponent{\viscosity_{\component}} %remover
+\def \viscosityLowPressure{\viscosity^{*}}
+\def \viscosityLowPressureComponent{\viscosityLowPressure_{\component}} %remover
+\def \Reduced{r} %remover
+\def \reducedTemperature{\temperature_{\Reduced}}
+\def \reducedTemperatureComponent{\temperature_{\Reduced \component}}%remover
+\def \reducedPressure{\pressure_{\Reduced}}
+\def \reducedMolarDensity{\molarDensity_{\Reduced}}
+\def \zetaParam{\zeta}
+\def \zetaParamComponent{\zetaParam_{\component}}
+\def \atmPressure{atm}
+\def \kelvinTemperature{K}
+\def \reducedMolarDensity{\molarDensity_{\Reduced}}
+\def \reducedMolarDensityPhase{\molarDensity_{\Reduced \phase}}
+\def \etaParam{\eta}
+\def \sumInComponents{\displaystyle \sum_{\component}^{\numberOfComponents}} %remover
+\def \MolarMass{M}
+\def \MolarMassComponet{\MolarMass_{\component}} %remover
+\def \mobility{\lambda}
+\def \mobilityPhase{\mobility_{\phase}} % remover
+\def \totalMobility{\mobility_{T}}
+
+\def \coarseRatio{Cr}
+\def \volf {\Omega_{i}}
+\def \volfBoundary{\partial \volf}
+\def \volcoarse {\Omega_{I}}
+\def \volDual{\Omega_{I}^{d}}
+\def \boundaryVolDual{\partial \volDual}
+\def \prolOperator{\underline{\underline{OP}}}
+\def \level{l}
+\def \prolOperatorIi{\prolOperator^{\level}_{\level-1}}
+\def \restOperator{\underline{\underline{OR}}}
+\def \restOperatorIi{\restOperator^{\level-1}_{\level}}
+\def \basisFunction{\phi}
+\def \basisFunctionIi{\basisFunction^{I}_{i}}
+\def \correctionFunc{\phi^{*}}
+\def \kroneckerDelta{\delta}
+\def \correctionFunci{\correctionFunc_{i}}
+\def \fine{f}
+\def \vectorPressure{\mathbf{\pressure}^{\fine}}
+\def \vectorFinePressureWire{\bold{P}^{fw}}
+
+\def \msPressure{\pressure'}
+\def \vectorMsPressure{\bold{\pressure}'}
+
+\def \numberFineVols{N^{f}}
+\def \numberCoarseVols{N^{c}}
+\def \coarsePressure{\pressure_{I}^{c}}
+\def \vectorCoarsePressure{\bold{\pressure}^{c}}
+\def \permutationMatrix{\underline{\underline{G}}}
+\def \transmissibility{T}
+\def \fineTransmissibility{\underline{\underline{\transmissibility}}^{f}}
+\def \vectorfineSource{\mathbf{q}^{f}}
+\def \dualInternal{i}
+\def \dualFace{f}
+\def \dualEdge{e}
+\def \dualVertex{v}
+\def \finewirebasketMatrix{\underline{\underline{M}}}
+\def \MIntInt{M_{\dualInternal \dualInternal}}
+\def \MIntFac{M_{\dualInternal \dualFace}}
+\def \MFacInt{M_{\dualFace \dualInternal}}
+\def \MFacFac{M_{\dualFace \dualFace}}
+\def \MFacEdg{M_{\dualFace \dualEdge}}
+\def \MEdgFac{M_{\dualEdge \dualFace}}
+\def \MEdgEdg{M_{\dualEdge \dualEdge}}
+\def \MEdgVer{M_{\dualEdge \dualVertex}}
+\def \MVertEdg{M_{\dualVertex \dualEdge}}
+\def \MVertVert{M_{\dualVertex \dualVertex}}
+\def \fineWirebasketSource{b}
+\def \vectorFineWirebasketSource{\bold{b}}
+\def \vectorFineWirebasketSourceMod{\bold{b}'}
+\def \finewirebasketMatrixMod{\underline{\underline{{\tilde{M}}}}}
+\def \MFacFacMod{\tilde{M}_{\dualFace \dualFace}}
+\def \MEdgEdgMod{\tilde{M}_{\dualEdge \dualEdge}}
+\def \coarseTransmissibility{\underline{\underline{\transmissibility}}^{c}}
+\def \correctionFunctionMatrix{\underline{\underline{C}}}
+\def \coarseSourceTerm{\bold{R}^{c}}
+\def \identityMatrixVert{I_{\dualVertex \dualVertex}}
+\def \spaceum{\hspace{0.1cm}}
+\def \refFigura{Figura}
+\def \vectorIntermPressure{\bold{P}''}
+\def \IntermPressure{P''}
+\def \prolOperatorAdm{\hat{\prolOperator}}
+\def \restOperatorAdm{\hat{\restOperator}}
+\def \vectorPressureAdm{\bold{\pressure}^{ADM}}
+
+\def \permeability{K}
+\def \molarPhaseFraction{\Upsilon}
