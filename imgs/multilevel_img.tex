@@ -1,0 +1,190 @@
+
+% \tikzset{
+% 	%Define standard arrow tip
+% 	>=stealth',
+% 	%Define style for boxes
+% 	punkt/.style={
+% 		rectangle,
+% 		rounded corners,
+% 		draw=black, very thick,
+% 		text width=6.5em,
+% 		minimum height=2em,
+% 		text centered},
+% 	% Define arrow style
+% 	pil/.style={
+% 		->,
+% 		thick,
+% 		shorten <=2pt,
+% 		shorten >=2pt,}
+% }
+
+% \tdplotsetmaincoords{120}{30}
+\tdplotsetmaincoords{112}{30}
+% \tdplotsetmaincoords{0}{0}
+% \begin{tikzpicture}[x  = {(-0.5cm,-0.5cm)},
+% y  = {(0.9659cm,-0.25882cm)},
+% z  = {(0cm,1cm)},
+% scale = 0.4]
+\begin{tikzpicture}[tdplot_main_coords, scale=0.3]
+	\def \za {0}
+	% \def \zb {8}
+	\def \zb {10}
+	% \def \zc {16}
+	\def \zc {20}
+	\def \compx {18}
+	\def \rx {3}
+	\def \rxx {9}
+	\def \nx {\compx/\rx}
+	\def \nxx {\compx/\rxx}
+
+	\tikzset{nivelstyle1/.style={fill=green,draw=black,opacity=1,very thin,line join=round}}
+	\tikzset{nivelstyle2/.style={fill=red,draw=black,opacity=1,very thin,line join=round}}
+
+	\draw[fill=lightgray,draw=black,opacity=1,very thin,line join=round]
+	(0,0,0) -- (\compx,0,0) --	(\compx,\compx,0) --	(0,\compx,0) --cycle;
+	\draw[very thick, line join=round]
+	(0,0,\za) -- (\compx,0,\za) -- (\compx,\compx,\za) -- (0,\compx,\za) --cycle;
+
+	\foreach \x in {1, 2, ..., \compx}{
+		\draw[very thin, line join=round]
+		(\x,0,\za) -- (\x,\compx,\za);
+	}
+
+	\foreach \y in {1, 2, ..., \compx}{
+		\draw[very thin, line join=round]
+		(0,\y,\za) -- (\compx,\y,\za);
+	}
+
+
+	\draw[very thick, line join=round]
+	(0,0,\zb) -- (\compx,0,\zb) -- (\compx,\compx,\zb) -- (0,\compx,\zb) --cycle;
+	\draw[fill=lightgray,draw=black,opacity=1,very thin,line join=round]
+	(0,0,\zb) -- (3,0,\zb) --	(3,3,\zb) --	(0,3,\zb) --cycle;
+	\draw[fill=lightgray,draw=black,opacity=1,very thin,line join=round]
+	(15,15,\zb) -- (18,15,\zb) --	(18,18,\zb) --	(15,18,\zb) --cycle;
+	\draw[style=nivelstyle1]
+	(0,3,\zb) -- (18,3,\zb) --	(18,15,\zb) --	(0,15,\zb) --cycle;
+	\draw[style=nivelstyle1]
+	(3,0,\zb) -- (18,0,\zb) --	(18,3,\zb) --	(3,3,\zb) --cycle;
+	\draw[style=nivelstyle1]
+	(0,15,\zb) -- (15,15,\zb) --	(15,18,\zb) --	(0,18,\zb) --cycle;
+
+	\draw[draw=black,very thin,line join=round]
+	(0,0,\zb) -- (3,0,\zb) --	(3,3,\zb) --	(0,3,\zb) --cycle;
+	\draw[draw=black,very thin,line join=round]
+	(15,15,\zb) -- (18,15,\zb) --	(18,18,\zb) --	(15,18,\zb) --cycle;
+
+	\foreach \x in {1, 2, 3}{
+		\draw[very thin, line join=round]
+		(\x,0,\zb) -- (\x,3,\zb);
+	}
+
+	\foreach \y in {1, 2, 3}{
+		\draw[very thin, line join=round]
+		(0,\y,\zb) -- (3,\y,\zb);
+	}
+
+	\foreach \x in {16, 17, 18}{
+		\draw[very thin, line join=round]
+		(\x,15,\zb) -- (\x,18,\zb);
+	}
+
+	\foreach \y in {16, 17, 18}{
+		\draw[very thin, line join=round]
+		(15,\y,\zb) -- (18,\y,\zb);
+	}
+
+	\foreach \x in {3, 6, 9, ..., 18}{
+		\draw[very thin, line join=round]
+		(\x,0,\zb) -- (\x,18,\zb);
+	}
+
+	\foreach \y in {3, 6, 9, ..., 18}{
+		\draw[very thin, line join=round]
+		(0,\y,\zb) -- (18,\y,\zb);
+	}
+
+	\draw[very thick,line join=round]
+	(0,0,\zc) -- (0,18,\zc) --	(18,18,\zc) --	(18,0,\zc) --cycle;
+	\draw[fill=lightgray,draw=black,opacity=1,very thin,line join=round]
+	(15,15,\zc) -- (18,15,\zc) --	(18,18,\zc) --	(15,18,\zc) --cycle;
+	\draw[fill=lightgray,draw=black,opacity=1,very thin,line join=round]
+	(0,0,\zc) -- (3,0,\zc) --	(3,3,\zc) --	(0,3,\zc) --cycle;
+	\draw[style=nivelstyle2]
+	(9,0,\zc) -- (18,0,\zc) --	(18,9,\zc) --	(9,9,\zc) --cycle;
+	\draw[style=nivelstyle2]
+	(0,9,\zc) -- (9,9,\zc) --	(9,18,\zc) --	(0,18,\zc) --cycle;
+	\draw[draw=black,very thin,line join=round]
+	(15,15,\zc) -- (18,15,\zc) --	(18,18,\zc) --	(15,18,\zc) --cycle;
+	\draw[draw=black,very thin,line join=round]
+	(9,0,\zc) -- (18,0,\zc) --	(18,9,\zc) --	(9,9,\zc) --cycle;
+	\draw[draw=black,very thin,line join=round]
+	(0,9,\zc) -- (9,9,\zc) --	(9,18,\zc) --	(0,18,\zc) --cycle;
+	\draw[style=nivelstyle1]
+	(0,3,\zc) -- (9,3,\zc) --	(9,9,\zc) --	(0,9,\zc) --cycle;
+	\draw[style=nivelstyle1]
+	(3,0,\zc) -- (9,0,\zc) --	(9,3,\zc) --	(3,3,\zc) --cycle;
+	\draw[style=nivelstyle1]
+	(9,9,\zc) -- (18,9,\zc) --	(18,15,\zc) --	(9,15,\zc) --cycle;
+	\draw[style=nivelstyle1]
+	(15,15,\zc) -- (15,18,\zc) --	(9,18,\zc) --	(9,15,\zc) --cycle;
+
+	\foreach \x in {1, 2, 3}{
+		\draw[very thin, line join=round]
+		(\x,0,\zc) -- (\x,3,\zc);
+	}
+
+	\foreach \y in {1, 2, 3}{
+		\draw[very thin, line join=round]
+		(0,\y,\zc) -- (3,\y,\zc);
+	}
+
+	\foreach \x in {16, 17, 18}{
+		\draw[very thin, line join=round]
+		(\x,15,\zc) -- (\x,18,\zc);
+	}
+
+	\foreach \y in {16, 17, 18}{
+		\draw[very thin, line join=round]
+		(15,\y,\zc) -- (18,\y,\zc);
+	}
+
+	\foreach \x in {3, 6, 9}{
+		\draw[very thin, line join=round]
+		(\x,0,\zc) -- (\x,9,\zc);
+	}
+
+	\foreach \y in {3, 6, 9}{
+		\draw[very thin, line join=round]
+		(0,\y,\zc) -- (9,\y,\zc);
+	}
+
+	\foreach \x in {9, 12, 15}{
+		\draw[very thin, line join=round]
+		(\x,9,\zc) -- (\x,18,\zc);
+	}
+
+	\foreach \y in {9, 12, 15}{
+		\draw[very thin, line join=round]
+		(9,\y,\zc) -- (18,\y,\zc);
+	}
+
+  \node (N1) at (0,0,0) {};
+  \node (N2) at (0,0,\zb) {};
+  \node (N3) at (0,0,\zc) {};
+  \node (N4) at (18,18,\zc) {};
+  \node (N5) at (18,18,\zb) {};
+  \node (N6) at (18,18,0) {};
+  \draw[->,very thick] (N1) to [bend left=50] node[left] {Restrição} (N2);
+  \draw[->,very thick] (N2) to [bend left=50] node[left] {Restrição} (N3);
+  \draw[->,very thick] (N4) to [bend left=50] node[right,text width=0.5cm] {Prolongamento} (N5);
+  \draw[->,very thick] (N5) to [bend left=50] node[right] {Prolongamento} (N6);
+
+	\draw plot [mark=*, mark size=4] coordinates{(0.5,0.5,\za)};
+	\draw plot [mark=*, mark size=4] coordinates{(\compx-0.5,\compx-0.5,\za)};
+	\draw plot [mark=*, mark size=4] coordinates{(0.5,0.5,\zb)};
+	\draw plot [mark=*, mark size=4] coordinates{(\compx-0.5,\compx-0.5,\zb)};
+	\draw plot [mark=*, mark size=4] coordinates{(0.5,0.5,\zc)};
+	\draw plot [mark=*, mark size=4] coordinates{(\compx-0.5,\compx-0.5,\zc)};
+
+\end{tikzpicture}

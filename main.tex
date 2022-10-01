@@ -18,6 +18,9 @@
 \usepackage{calc}
 \usepackage{graphicx}
 \usepackage{tikz}
+\usepackage{array}
+\usepackage{tikz-3dplot}
+\usepackage{tikz-dimline}
 \usepackage[absolute,overlay]{textpos} % para usar textblock
 \usepackage{tcolorbox}
 \usepackage[absolute,overlay]{textpos}
@@ -62,6 +65,18 @@
   \end{minipage}%
   }%
 }
+
+%%%%%%%%%%%%%%%%%%%
+%% tikz
+\usetikzlibrary{matrix}
+\usetikzlibrary{calc,3d}
+\usetikzlibrary{arrows,positioning}
+\usetikzlibrary{shapes.callouts}
+\usetikzlibrary{shapes.geometric}
+\usetikzlibrary{decorations.text}
+\usetikzlibrary{math}
+%%%%%%%%%%%%%%%%%%%
+
 
 \setbeamersize{text margin left=0.5cm,text margin right=0.5cm}
 \newlength\MyColSep
@@ -273,6 +288,8 @@
         \caption{2D não estruturada}
         \label{fig:volumes_finitos1.d}
     \end{subfigure}
+
+    {\footnotesize Retirado de \cite{Knut2019}}
 \end{figure}
 
 \end{frame}
@@ -391,10 +408,10 @@ Aplicando o teorema de Gauss na segunda integral de \eqref{eq:volumes_finitos.1}
 \end{frame}
 
 \begin{frame}{Equações de Estado}
-    \small
     Onde $\coefFugacity_{\component \phase}$ pode ser encontrado por
 
     \begin{equation}
+        \small
         \label{eq:eos.10}
         \begin{aligned}
             &\ln (\coefFugacity_{\componentt \phase}) = \dfrac{b_{\componentt}}{\bPhase} (\ZfactorPhase - 1) - \ln (\ZfactorPhase - \BPhase)\\
@@ -416,16 +433,100 @@ Aplicando o teorema de Gauss na segunda integral de \eqref{eq:volumes_finitos.1}
 \end{frame}
 
 \begin{frame}{Equação da pressão}
+    Equação do balanço molar \cite{Fernandes_2014}:
+
+    \begin{equation}
+        \label{eq:modelo_mat.1}
+        \dfrac{1}{\bulkVolume} \pd{\molNumber_{\component}}{t} = \sum_{\phase}^{\numberOfPhases} \div{\left(\molarPartialFrac_{\component \phase} \molarDensityPhase \velocity_{\phase} \right)} + \dfrac{\mSourceTerm_{\component}}{\bulkVolume} ,
+    \end{equation}
+
+    \begin{description}[]
+        \item $\molNumber_{\component}$ = número de mols do componente $\component$;
+        \item $\molarDensityPhase \left[ \dfrac{mol}{\m3} \right]$ = densidade molar da fase $\phase$;
+        \item $\mSourceTerm_{\component} \left[ \dfrac{mol}{s} \right]$ = termo fonte do componente $\component$;
+        \item $\numberOfPhases$ = número de fases;
+        \item $\bulkVolume$ = Volume total
+    \end{description}
+\end{frame}
+
+\begin{frame}{Equação da pressão}
+    A equação da pressão é obtida igualando o volume poroso ao volume do fluido
+    \cite{Acs_1985}:
+
+    \begin{equation}
+        \label{eq:modelo_mat.2}
+        \poroVolume (\pressure) = \totalFluidVolume (\pressure, \molNumber_{1}, \molNumber_{2}, ..., \molNumber_{\numberOfComponents + 1}),
+    \end{equation}
+
+    \begin{description}[]
+        \item $\poroVolume$ = volume poroso = $\porosidade \bulkVolume$;
+        \item $\porosidade$ = porosidade = $\porosidadeIni \left[1 + \rockCompress (\pressure - \pressureIni) \right]$;
+        \item $\totalFluidVolume$ = volume total do fluido 
+        \item $\rockCompress$ = compressibilidade da rocha;
+        \item $\porosidadeIni$ = porosidade na pressão de referência $\pressureIni$
+    \end{description}
     
 \end{frame}
 
-\begin{frame}{Equação do balanço molar}
+\begin{frame}{Equação da pressão}
+    Derivando \eqref{eq:modelo_mat.2} com relação ao tempo:
+
+    \begin{equation}
+        \label{eq:modelo_mat.2.1}
+        \pd{\poroVolume}{\pressure} \pd{\pressure}{\timme} = \pd{\totalFluidVolume}{\pressure} \pd{\pressure}{\timme} + \sum_{\component}^{\numberOfComponents + 1} \left( \pd{\totalFluidVolume}{\molNumber_{\component}}  \right)_{\pressure} \pd{\molNumber_{\component}}{\timme}.
+    \end{equation}
+
+    Derivando o volume poroso em relação a pressão:
+
+    \begin{equation}
+        \label{eq:modelo_mat.5}
+        \pd{\poroVolume}{\pressure} = \bulkVolume \porosidadeIni \rockCompress .
+    \end{equation}
     
 \end{frame}
+
+\begin{frame}{Equação da pressão}
+    Substituindo \eqref{eq:modelo_mat.5} em \eqref{eq:modelo_mat.2} temos:
+
+    \begin{equation}
+        \label{eq:modelo_mat.6}
+        \bulkVolume \porosidadeIni \rockCompress \pd{\pressure}{\timme} = \pd{\totalFluidVolume}{\pressure} \pd{\pressure}{\timme} + \sum_{\component}^{\numberOfComponents + 1} \left( \pd{\totalFluidVolume}{\molNumber_{\component}}  \right)_{\pressure} \pd{\molNumber_{\component}}{\timme},
+    \end{equation}
+
+    Substituindo $\pd{\molNumber_{\component}}{\timme}$ de \eqref{eq:modelo_mat.6} em  \eqref{eq:modelo_mat.1} temos a equação da pressão:
+
+    \begin{equation}
+        \label{eq:modelo_mat.7}
+        \left( \porosidadeIni \rockCompress - \dfrac{1}{\bulkVolume} \pd{\totalFluidVolume}{\pressure} \right) \pd{\pressure}{\timme} = \sum_{\component}^{\numberOfComponents + 1} \left( \pd{\totalFluidVolume}{\molNumber_{\component}}  \right)_{\pressure} \left[ \sum_{\phase}^{\numberOfPhases} \div{\left(\molarPartialFrac_{\component \phase} \molarDensityPhase \velocity_{\phase} \right)} + \dfrac{\mSourceTerm_{\component}}{\bulkVolume}\right], 
+    \end{equation}
+    
+\end{frame}
+
+\begin{frame}{Restrições}
+
+    \begin{equation}
+        \label{eq:modelo_mat.9}
+        \sum_{\phase}^{\numberOfPhases} \Saturation_{\phase} = 1, \hspace{0.5cm} \sum_{\component}^{\numberOfComponents} \molarPartialFrac_{\component \oilPhase} = 1, \hspace{0.5cm} \sum_{\component}^{\numberOfComponents} \molarPartialFrac_{\component \gasPhase} = 1.
+    \end{equation}
+
+    A fim de garantir equilíbrio termodinâmico entre as fases:
+
+    \begin{equation}
+        \label{eq:modelo_mat.8}
+        f_{\component o} = f_{\component g},
+    \end{equation}
+    
+\end{frame}
+
+% \begin{frame}{Equação do balanço molar}
+    
+% \end{frame}
 
 
 \begin{frame}{Estratégia IMPEC}
-    
+    \centering
+        \resizebox*{4cm}{!}{
+        \input{./imgs/flowchart_impec.tex}}
 \end{frame}
 
 
@@ -435,29 +536,252 @@ Aplicando o teorema de Gauss na segunda integral de \eqref{eq:volumes_finitos.1}
 
 \subsection{Métodos de Transferência de escala}
 \begin{frame}{Transferência de escala}
-    
+    \begin{figure}[!ht]
+        \begin{subfigure}{0.4\textwidth}
+            \centering
+            \resizebox*{5cm}{!}{
+            \input{./imgs/upscaling.tex}}
+            \subcaption{\textit{Upscaling}}
+            \label{fig:multiescala.1.b}
+        \end{subfigure}
+        \begin{subfigure}{0.55\textwidth}
+            \centering
+            \resizebox*{6.5cm}{!}{
+            \input{./imgs/multiescala_classico.tex}}
+            \subcaption{Multiescala}
+            \label{fig:multiescala.1.a}
+        \end{subfigure}
+        % \label{fig:multiescala.1}
+    \end{figure}
+\end{frame}
+
+\begin{frame}{Transferência de escala}
+    \begin{figure}[!ht]
+        \centering
+        \resizebox*{7cm}{!}{
+        \input{./imgs/multilevel_img.tex}}
+        
+        {\footnotesize Método ADM} 
+        \label{fig:multinivel.1}
+    \end{figure}
+\end{frame}
+
+\begin{frame}{Método Multiescala}
+    \begin{figure}[!ht]
+        % \caption{Malhas fina e grossa primal}
+        \begin{subfigure}{.48\textwidth}
+            \centering
+            \resizebox*{5cm}{!}{
+            \input{./imgs/im10.tex}}
+            \subcaption{Volumes da malha fina}
+            \label{fig:multiescala.2.a}
+        \end{subfigure}
+        \begin{subfigure}{.48\textwidth}
+            \centering
+            \resizebox*{5cm}{!}{
+            \input{./imgs/im12.tex}}
+            \subcaption{Volumes da malha grossa primal}
+            \label{fig:multiescala.2.b}
+        \end{subfigure}
+        \label{fig:multiescala.2}
+    \end{figure}
+\end{frame}
+
+\begin{frame}{Método Multiescala}
+    \begin{figure}[!ht]
+        % \caption{Malha grossa dual}
+        \begin{subfigure}{.48\textwidth}
+            \centering
+            \resizebox*{5.9cm}{!}{
+            \input{./imgs/im14.tex}}
+            \subcaption{Classificação dos volumes}
+            \label{fig:multiescala.3.a}
+        \end{subfigure}
+        \begin{subfigure}{.48\textwidth}
+            \centering
+            \resizebox*{4.25cm}{!}{
+            \input{./imgs/im15.tex}}
+            \subcaption{Volume da malha grossa dual $ \left( \volDual \right)$}
+            \label{fig:multiescala.3.b}
+        \end{subfigure}
+        \label{fig:multiescala.3}
+    \end{figure}
 \end{frame}
 
 \begin{frame}{Método Multiescala}
     
+    \small 
+    O Operador de Prolongamento ($\prolOperator$) é responsável por realizar o \textit{downscaling} das informações da malha grossa, e é encontrado a partir do cáculo das funções de base ($\basisFunctionIi$) dado por \cite{Zhou2012, Wang2014}:
+
+    \begin{equation}
+        \label{eq:multiescala.1}
+        \begin{cases}
+            \div{\left( \totalMobility \permTensor \grad{\basisFunctionIi} \right)} = 0 & \text{em } \volDual\\
+            \vec{\nabla}_{\parallel} \cdot \left( \totalMobility \permTensor \grad{\basisFunctionIi} \right)_{\parallel} = 0 & \text{em } \boundaryVolDual\\
+            \basisFunctionIi \left( x^{k}\right) = \kroneckerDelta_{Ik},
+        \end{cases}
+    \end{equation}
+
+    onde $\boundaryVolDual$ é o contorno do volume dual $\volDual$, $\parallel$ indica a componente tangencial do fluxo em $\partial \volDual$, $x^{k}$ é o volume que é vértice da malha grossa dual e $\kroneckerDelta_{Ik}$ é o delta de Kronecker aplicado em $x^{k}$. Nesse trabalho foi adotado o método  das condições de contorno reduzidas \cite{Arthur_diss,Mazlumi_2021}.
+\end{frame}
+
+\begin{frame}{Método Multiescala}
+    \begin{figure}[!ht]
+        \caption{Valores das funções de base para o vértice $x_{1}$}
+        \centering
+        \includegraphics[scale=0.4]{./imgs/op_example.png}    
+        \label{fig:operador_method.1}
+
+        {\footnotesize Retirado de \cite{Hajibeygi_2020}}
+    \end{figure}
+\end{frame}
+
+\begin{frame}{Método Multiescala}
+    O operador de restrição utilizado nesse trabalho, que é responsável por realizar o \textit{Upscaling} das informações, é o operador clássico de volumes finitos, dado por \cite{Tene_2016}:
+
+    \begin{equation}
+        \label{eq:multiescala.11}
+        \restOperator = 
+        \begin{cases}
+            1 & \text{ se } \volf \in \volcoarse\\
+            0 & \text{ caso contrário }
+        \end{cases}.
+    \end{equation}
+\end{frame}
+
+\begin{frame}{Método Multiescala}
+    \small
+    \begin{gather*}
+        \vectorPressure \approx \vectorMsPressure = \prolOperator \vectorCoarsePressure \\
+        \fineTransmissibility \vectorPressure = \vectorfineSource  \longrightarrow \fineTransmissibility \prolOperator \vectorCoarsePressure = \vectorfineSource \\
+        \restOperator \spaceum \fineTransmissibility \vectorPressure = \restOperator \vectorfineSource  \longrightarrow \coarseTransmissibility \vectorCoarsePressure = \coarseSourceTerm \\
+        \coarseTransmissibility = \restOperator \spaceum \fineTransmissibility \prolOperator \\
+        \coarseSourceTerm = \restOperator \vectorfineSource
+    \end{gather*}
+    \begin{description}
+        \item $\vectorCoarsePressure$ = pressão da escala grossa;
+        \item $\coarseTransmissibility$ = matrix transmissibilidade da escala grossa;
+        \item $\coarseSourceTerm$ = termo fonte da escala grossa;
+        \item $\coarseTransmissibility \vectorCoarsePressure = \coarseSourceTerm$ : sistema linear da escala grossa
+    \end{description}
+\end{frame}
+
+\begin{frame}{Método Multiescala}
+    Devido a imposição de desacoplamento para construção do operador de prolongamento, a pressão multiescala não garante conservação da massa em todos os volumes da malha fina, fazendo-se necessária a reconstrução da velocidade \cite{Moyner_2014,Jenny2003} dada por:
+
+    \begin{equation}
+        \label{eq:5_5_4.1}
+        \begin{cases}
+          (K \lambda_{T} \grad{\mathbf{P}''}) \cdot \vec{n} = (K \lambda_{T} \grad{\vectorMsPressure}) \text{ em } \partial \Omega_{i}^{c}\\
+          \div{K \lambda_{T} \grad{\mathbf{P}''}} = q \text{ em } \Omega_{i}^{c}\\
+        \end{cases}
+      \end{equation}
+\end{frame}
+
+% \begin{frame}{Método Multiescala}
+    
+% \end{frame}
+
+
+\begin{frame}{Método ADM}
+    \small
+    A transferência de escala para o nível superior ($l$) é feita utilizando os operadores ADM da seguinte forma \cite{Cusini2016}:
+
+    \begin{equation}
+        \label{eq:multinivel.1}
+    (\prolOperatorAdm)^{l}_{l-1} (i,j) =
+        \begin{cases}
+            (\prolOperator)^{l}_{l-1} (i,j) \text{ se a célula } i \in \Gamma^{l-1} \text{ e a célula } j \in \hat{\Pi}^{l}\\
+            \delta_{ij} \text{ caso contrário},\\
+        \end{cases}
+    \end{equation}
+
+    \begin{equation}
+        \label{eq:multinivel.2}
+    (\restOperatorAdm)^{l-1}_{l} (i,j) =
+        \begin{cases}
+            (\restOperator)^{l-1}_{l} (i,j) \text{ se a célula } i \in \Gamma^{l} \text{ e a célula } j \in \Gamma^{l-1}\\
+            \delta_{ij} \text{ caso contrário}.\\
+        \end{cases}
+    \end{equation}
+
 \end{frame}
 
 \begin{frame}{Método ADM}
-    
+    \begin{figure}
+        \caption{Representação dos conjuntos $\Omega^{l}$, $\Pi^{l}$ e $\Gamma^{l}$}
+        \begin{subfigure}{.3\textwidth}
+            \centering
+            \resizebox*{3cm}{!}{
+            \input{./imgs/adm2.tex}}
+            \subcaption{$\Omega^{l}$}
+            \label{fig:multinivel.2.a}
+        \end{subfigure}
+        \begin{subfigure}{.3\textwidth}
+            \centering
+            \resizebox*{3cm}{!}{
+            \input{./imgs/adm1.tex}}
+            \subcaption{$\Pi^{l}$}
+            \label{fig:multinivel.2.b}
+        \end{subfigure}
+        \begin{subfigure}{.3\textwidth}
+            \centering
+            \resizebox*{3cm}{!}{
+            \input{./imgs/adm3.tex}}
+            \subcaption{$\Gamma^{l}$}
+            \label{fig:multinivel.2.c}
+        \end{subfigure}
+        \label{fig:multinivel.2}
+    \end{figure}
+
+    \begin{equation}
+        \label{eq:multinivel.3}
+        ( \restOperatorAdm )^{l-1}_{l} ... ( \restOperatorAdm )^{0}_{1} \fineTransmissibility (\prolOperatorAdm)^{l}_{l-1} ... (\prolOperatorAdm)^{1}_{0} \vectorPressureAdm = ( \restOperatorAdm )^{l-1}_{l} ... ( \restOperatorAdm )^{0}_{1} \vectorfineSource,
+    \end{equation}
 \end{frame}
 
 \begin{frame}{Método NU-ADM}
+    A fim de diminuir a quantidade de volumes na malha ADM, foi desenvolvido por \citeonline{Araujo_dos_Santos_2022} o método ADM não uniforme (NU-ADM), permitindo que os volumes não engrossados não estejam necessariamente agrupados de acordo com o volume da malha grossa, reduzindo o sistema linear da escala ADM.
 
+
+\end{frame}
+
+\begin{frame}{Método NU-ADM}
+    \begin{figure}
+        \caption{Diferença entre os métodos ADM e NU-ADM}
+        \begin{subfigure}{.48\textwidth}
+            \centering
+            \resizebox*{5cm}{!}{
+            \input{./imgs/adm2.tex}}
+            \subcaption{Método ADM}
+            \label{fig:multinivel.3.a}
+        \end{subfigure}
+        \begin{subfigure}{.48\textwidth}
+            \centering
+            \resizebox*{5cm}{!}{
+            \input{./imgs/adm4.tex}}
+            \subcaption{Método NU-ADM}
+            \label{fig:multinivel.3.b}
+        \end{subfigure}
+        \label{fig:multinivel.2}
+    \end{figure}
 
 \end{frame}
 
 \section{Metodologia}
 \begin{frame}{Seleção dos níveis}
-    
+    \small
+    \begin{itemize}
+        \item Os volumes da malha grossa que possuírem algum volume com valores prescritos de vazão ou pressão, serão mantidos inteiramente no menor nível, ou seja, na malha fina, a fim de capturar melhor os gradientes de pressão nessa região.
+        \item Será definido um valor limite ($\Delta \Saturation_{lim}$) pelo usuário para o qual será calculada a variação de saturação das fases ($\Delta \Saturation$) entre os volumes da malha fina adjacentes por face. Caso essa variação de saturação ultrapasse o valor definido pelo usuário, ambos volumes serão mantidos na malha fina.
+        \item Em alguns passos de tempo pode acontecer de algum volume da malha fina apresentar o número de mols negativo, com valor próximo de zero. Nessa situação, esse volume e seus vizinhos são mantidos na malha fina para o próximo passo de tempo e o número de mols é mantido como zero, sendo atualizado no próximo passo de tempo.
+    \end{itemize}
 \end{frame}
 
 \begin{frame}{Operador de Prolongamento}
-    
+    \begin{itemize}
+        \item O operador de prolongamento foi construído segundo o método AMS (\textit{Algebraic Multiscale Solver}) \cite{Wang2015,Moyner_2014}
+    \end{itemize}
 \end{frame}
 
 \begin{frame}{Atualização das funções de base}
