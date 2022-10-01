@@ -27,6 +27,7 @@
 % \usepackage[font=small,compatibility=false]{caption}
 \usepackage[font=footnotesize]{subcaption}
 % \usepackage{subfig}
+\usepackage{nicefrac}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -173,8 +174,8 @@
     \item Importância da simulação computacional
     \item Importância da utilização de modelos composicionais
     \item Problema do tempo de simulação
-    \item Métodos de Transferência de escala: \textit{Upscaling}, Multiescala, ADM
-    \item Método NU-ADM
+    \item Métodos de Transferência de escala: \textit{Upscaling}, Multiescala, ADM (\textit{Algebraic Dynamic Multilevel Method})
+    \item Método NU-ADM (\textit{Non Uniform Algebraic Dynamic Multilevel Method})
 \end{itemize}
 \end{frame}
 
@@ -332,14 +333,31 @@ Aplicando o teorema de Gauss na segunda integral de \eqref{eq:volumes_finitos.1}
 \end{column}
 \end{columns}
 
-
-
-    
 \end{frame}
 
 
 
 \subsection{Modelo Composicional}
+
+\begin{frame}{Simplificações}
+    \begin{itemize}
+        \item Escoamento isotérmico;
+        \item Equilíbrio termodinâmico local entre as fases;
+        \item Ausência do termo de pressão capilar;
+        \item Ausência do termo de gravidade;
+        \item A velocidade é dada pela Lei de Darcy;
+        \item O componente água é imiscível;
+        \item O meio está totalmente saturado;
+        \item Rocha pouco compressível;
+        \item Não há reacão química entre os fluidos;
+        \item Não há interação entre rocha e fluido;
+        \item Não há o fenômeno de dispersão;
+        \item A viscosidade da fase água é constante;
+        \item São consideradas 3 fases: água, óleo e gás.
+    \end{itemize}
+    
+\end{frame}
+
 \begin{frame}{Equações de estado}
 
 % \begin{columns}
@@ -530,9 +548,9 @@ Aplicando o teorema de Gauss na segunda integral de \eqref{eq:volumes_finitos.1}
 \end{frame}
 
 
-\begin{frame}{Método \textit{Upwind}}
+% \begin{frame}{Método \textit{Upwind}}
     
-\end{frame}
+% \end{frame}
 
 \subsection{Métodos de Transferência de escala}
 \begin{frame}{Transferência de escala}
@@ -659,6 +677,7 @@ Aplicando o teorema de Gauss na segunda integral de \eqref{eq:volumes_finitos.1}
         \coarseSourceTerm = \restOperator \vectorfineSource
     \end{gather*}
     \begin{description}
+        \item $\vectorMsPressure$ = pressão multiescala;
         \item $\vectorCoarsePressure$ = pressão da escala grossa;
         \item $\coarseTransmissibility$ = matrix transmissibilidade da escala grossa;
         \item $\coarseSourceTerm$ = termo fonte da escala grossa;
@@ -667,15 +686,33 @@ Aplicando o teorema de Gauss na segunda integral de \eqref{eq:volumes_finitos.1}
 \end{frame}
 
 \begin{frame}{Método Multiescala}
+    
+    \small
     Devido a imposição de desacoplamento para construção do operador de prolongamento, a pressão multiescala não garante conservação da massa em todos os volumes da malha fina, fazendo-se necessária a reconstrução da velocidade \cite{Moyner_2014,Jenny2003} dada por:
 
     \begin{equation}
         \label{eq:5_5_4.1}
         \begin{cases}
-          (K \lambda_{T} \grad{\mathbf{P}''}) \cdot \vec{n} = (K \lambda_{T} \grad{\vectorMsPressure}) \text{ em } \partial \Omega_{i}^{c}\\
-          \div{K \lambda_{T} \grad{\mathbf{P}''}} = q \text{ em } \Omega_{i}^{c}\\
+          (K \lambda_{T} \grad{\mathbf{P}''}) \cdot \vec{n} = (K \lambda_{T} \grad{\vectorMsPressure}) \text{ em } \partial \Omega_{I}\\
+          \div{K \lambda_{T} \grad{\mathbf{P}''}} = q \text{ em } \Omega_{I}\\
         \end{cases}
       \end{equation}
+
+      \begin{columns}
+        \begin{column}{0.5\textwidth}
+            \begin{description}[]
+                \item $\lambda_{T}$: mobilidade total do fluido = $\sum_{\phase} \lambda_{\phase}$ ;
+                \item $\lambda$: mobilidade do fluido = $\nicefrac{k_{r}}{\mu}$;
+                \item $k_r$: permeabilidade relativa 
+              \end{description}
+        \end{column}
+        \begin{column}{0.5\textwidth}
+            \begin{description}[]
+                \item $\partial \Omega_{I}$: Contorno do volume $\Omega_{I}$ 
+              \end{description}
+        \end{column}
+
+      \end{columns}
 \end{frame}
 
 % \begin{frame}{Método Multiescala}
@@ -779,16 +816,54 @@ Aplicando o teorema de Gauss na segunda integral de \eqref{eq:volumes_finitos.1}
 \end{frame}
 
 \begin{frame}{Operador de Prolongamento}
+    \small
     \begin{itemize}
         \item O operador de prolongamento foi construído segundo o método AMS (\textit{Algebraic Multiscale Solver}) \cite{Wang2015,Moyner_2014}
     \end{itemize}
+
+    \begin{figure}[!ht]
+        
+        \begin{subfigure}{.3\textwidth}
+            \centering
+            \includegraphics[scale=0.27]{./imgs/im10.png}
+            \subcaption{$\fineTransmissibility$}
+            \label{fig:multiescala.4.a}
+        \end{subfigure}
+        \begin{subfigure}{.3\textwidth}
+            \centering
+            \includegraphics[scale=0.27]{./imgs/im11.png}
+            \subcaption{\finewirebasketMatrix}
+            \label{fig:multiescala.4.b}
+        \end{subfigure}
+        \begin{subfigure}{.3\textwidth}
+            \centering
+            \includegraphics[scale=0.27]{./imgs/im12.png}
+            \subcaption{$\finewirebasketMatrixMod$}
+            \label{fig:multiescala.4.c}
+        \end{subfigure}
+        
+        {\footnotesize Fonte: Retirado de \cite{Magri2015}}
+        \label{fig:multiescala.4}
+    \end{figure}
+
 \end{frame}
 
 \begin{frame}{Atualização das funções de base}
-    
+    As funções de base são atualizadas segundo \citeonline{Zhou2010}, utilizando um valor determinado pelo usuário ($\epsilon$) para verificar a variação da mobilidade de cada fase entre dois passos de tempo consecutivos ($n-1$ e $n$), segundo a seguinte equação:
+
+\begin{equation}
+    \dfrac{1}{1+\epsilon} < \dfrac{\mobility_{\phase}^{n}}{\mobility_{\phase}^{n-1}}  < 1 + \epsilon  
+    \label{eq:update_bf.1}
+\end{equation}
 \end{frame}
 
 \begin{frame}{Método de solução da pressão e composições}
+
+    \begin{itemize}
+        \item O cálculo da pressão é realizada de acordo com \citeonline{Zhou2012}, utilizando o \textit{solver} de Richardson;
+        \item No \textit{solver} de Richardson, nas iterações intermediárias, o operador de restrição é o transposto do operador de prolongamento.
+        \item A solução explícita do transporte é resolvida na malha fina, e, como é de suma importância que o campo de pressão seja conservativo, na última iteração utiliza-se o operador de restrição de volumes finitos. 
+    \end{itemize}
     
 \end{frame}
 
