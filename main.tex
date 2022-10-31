@@ -222,7 +222,7 @@
 \subsection{Lei de Darcy}
 \begin{frame}{Lei de Darcy}
 
-\begin{textblock*}{.5\paperwidth}(0.2cm,2.5cm)
+\begin{textblock*}{.5\paperwidth}(0.2cm,2.7cm)
     \centering
     \includegraphics[scale=0.4]{./imgs/im1.png}
     \footnotesize Retirado de \cite{Rosa2006}.
@@ -859,7 +859,7 @@ Aplicando o teorema da divergência de Gauss na segunda integral de \eqref{eq:vo
             \label{fig:multiescala.4.c}
         \end{subfigure}
         
-        {\footnotesize Fonte: Retirado de \cite{Magri2015}}
+        {\footnotesize Fonte:\cite{Magri2015}}
         \label{fig:multiescala.4}
     \end{figure}
 
@@ -1929,9 +1929,29 @@ Aplicando o teorema da divergência de Gauss na segunda integral de \eqref{eq:vo
 \section{Conclusões}
 \begin{frame}{Conclusões}
 
-    Para a verificar a acurácia do método NU-ADM e os tempos de simulação, foram utilizados um exemplo bidimensional bifásico e dois unidimensionais trifásicos, todos sendo simulados em modo serial. No primeiro exemplo, com apenas um componente na fase óleo, foi possível observar como se comporta o refinamento da malha NU-ADM na frente de saturação de acordo com $\Delta \Saturation_{lim}$ e que a solução NU-ADM se aproxima da solução obtida diretamente na malha fina. 
+    \begin{itemize}
+        \item Desenvolvimento do simulador NU-ADM composicional.
+        \item Foram simulados 3 exemplos: um 2D e dois 1D (Problema 2 com 6 componentes e o Problema 3 com 3).
+        \item No Problema 1 foi possível verificar a adaptação da malha.
+        \item No Problema 2, noutou-se melhor performance com uma razão de engrossamento intermediária, mesmo atualizando as funções de base.
+        \item No Problema 3 todas as soluções NU-ADM se aproximaram da malha fina, mas atualizar as funções de base não melhorou significativamente os resultados.
+    \end{itemize}
 
-Nos outros dois exemplos (um com 6 componentes hidrocarbonetos e o outro com três) foram verificados a acurácia do método NU-ADM e os tempos de simulação com diferentes razões de engrossamento. No primeiro notou-se uma melhor \textit{performance} com a razão de engrossamento intermediária, onde o fato de atualizar as funções de base melhorou a solução, aproximando mais da solução da malha fina, enquanto que, não atualizar as funções de base resultou numa solução com menor acurácia porém com um tempo de simulação menor que o da escala fina. No terceiro exemplo, em todas razões de engrossamento, a solução NU-ADM foi igual a da malha fina, onde o fato de atualizar as funções de base não influenciou significativamente na acurácia, mas apenas no tempo de simulação.
+%     Para a verificar a acurácia do método NU-ADM e os tempos de simulação, foram utilizados um exemplo bidimensional bifásico e dois unidimensionais trifásicos, todos sendo simulados em modo serial. No primeiro exemplo, com apenas um componente na fase óleo, foi possível observar como se comporta o refinamento da malha NU-ADM na frente de saturação de acordo com $\Delta \Saturation_{lim}$ e que a solução NU-ADM se aproxima da solução obtida diretamente na malha fina. 
+
+% Nos outros dois exemplos (um com 6 componentes hidrocarbonetos e o outro com três) foram verificados a acurácia do método NU-ADM e os tempos de simulação com diferentes razões de engrossamento. No primeiro notou-se uma melhor \textit{performance} com a razão de engrossamento intermediária (64), onde o fato de atualizar as funções de base melhorou a solução, aproximando mais da solução da malha fina, enquanto que, não atualizar as funções de base resultou numa solução com menor acurácia porém com um tempo de simulação menor que o da escala fina. No terceiro exemplo, em todas razões de engrossamento, a solução NU-ADM foi igual a da malha fina, onde o fato de atualizar as funções de base não influenciou significativamente na acurácia, mas apenas no tempo de simulação.
+    
+\end{frame}
+
+\begin{frame}{Conclusões}
+    São apontadas como sugestões para trabalhos futuros:
+
+\begin{itemize}
+    \item Incluir os efeitos da gravidade e da capilaridade;
+    \item Adicionar outros níveis de engrossamento;
+    \item Implementar o método NU-ADM em outras estratégias de solução (como os métodos sequencial implícito o totalmente implícito);
+    \item Implementar o método NU-ADM em malhas não estruturadas.
+\end{itemize}
     
 \end{frame}
 
