@@ -28,7 +28,19 @@
 \usepackage[font=footnotesize]{subcaption}
 % \usepackage{subfig}
 \usepackage{nicefrac}
+% % tabelas
+% \usepackage{tabularx,ltxtable} % also load longtable
+% \usepackage{array,xparse}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% tabelas
+\usepackage{tabularx,ltxtable} % also load longtable
+\usepackage{array,xparse}
+% \usepackage{longtable}
+\usepackage{makecell}
+% \usepackage{hhline}
+\usepackage{cellspace}
+\usepackage{colortbl}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%% definitions
@@ -110,7 +122,7 @@
     % \titlepage
     \begin{minipage}{\textwidth}
     
-    \begin{textblock*}{5cm}(0.5cm,2.8cm) % {block width} (coords)
+    \begin{textblock*}{5cm}(0.5cm,2.3cm) % {block width} (coords)
         \includegraphics[scale=0.2]{./imgs/ufpe.png}
     \end{textblock*}
     
@@ -118,7 +130,7 @@
         \Large \instituicao
     \end{textblock*}
     
-    \begin{textblock*}{5cm}(10.5cm,2.9cm) % {block width} (coords)
+    \begin{textblock*}{5cm}(10.5cm,2.4cm) % {block width} (coords)
         \includegraphics[scale=0.25]{./imgs/padmec.jpeg}
     \end{textblock*}
     \end{minipage}
@@ -186,7 +198,7 @@
 
     \begin{block}{Geral}
         \begin{itemize}
-            \item Desenvolver uma bliblioteca em Python que realize a transferência de escala, aplicando o método ADM não uniforme (NU-ADM) em modelos que lidam com escoamento composicional.
+            \item Desenvolver uma bliblioteca na libguagem Python que realize a transferência de escala, aplicando o método ADM não uniforme (NU-ADM) em modelos que lidam com escoamento composicional.
         \end{itemize}
     \end{block}
     
@@ -198,9 +210,6 @@
     \begin{block}{Específicos}
         \begin{itemize}
             \item Desenvolver um interpretador os dados do reservatório
-            \item Estudar o modelo de escoamento composicional
-            \item Estudar o método Multiescala
-            \item Estudar o método ADM e NU-ADM
             \item Aplicar o método NU-ADM no modelo composicional IMPEC
             \item Comparar a solução da malha fina com a obtida por meio do método NU-ADM
         \end{itemize}
@@ -305,7 +314,7 @@ Equação do balanço de massa na forma integral:
 	\int_{V} \pd{\rho}{t} dV = \int_{V} - \div{(\rho \velocity)} dV + \int_{V} Q dV
 \end{equation}
 
-Aplicando o teorema de Gauss na segunda integral de \eqref{eq:volumes_finitos.1} \cite{Souza2015}:
+Aplicando o teorema da divergência de Gauss na segunda integral de \eqref{eq:volumes_finitos.1} \cite{Souza2015}:
 
  \begin{equation}
 	 \label{eq:volumes_finitos.2}
@@ -640,7 +649,7 @@ Aplicando o teorema de Gauss na segunda integral de \eqref{eq:volumes_finitos.1}
         \end{cases}
     \end{equation}
 
-    onde $\boundaryVolDual$ é o contorno do volume dual $\volDual$, $\parallel$ indica a componente tangencial do fluxo em $\partial \volDual$, $x^{k}$ é o volume que é vértice da malha grossa dual e $\kroneckerDelta_{Ik}$ é o delta de Kronecker aplicado em $x^{k}$. Nesse trabalho foi adotado o método  das condições de contorno reduzidas \cite{Arthur_diss,Mazlumi_2021}.
+    onde $\boundaryVolDual$ é o contorno do volume dual $\volDual$, $\parallel$ indica a componente tangencial do fluxo em $\partial \volDual$, $x^{k}$ é o volume que é vértice da malha grossa dual e $\kroneckerDelta_{Ik}$ é o delta de Kronecker aplicado em $x^{k}$. Nesse trabalho foram adotadas as condições de contorno reduzidas \cite{Arthur_diss,Mazlumi_2021}.
 \end{frame}
 
 \begin{frame}{Método Multiescala}
@@ -650,7 +659,7 @@ Aplicando o teorema de Gauss na segunda integral de \eqref{eq:volumes_finitos.1}
         \includegraphics[scale=0.4]{./imgs/op_example.png}    
         \label{fig:operador_method.1}
 
-        {\footnotesize Retirado de \cite{Hajibeygi_2020}}
+        {\footnotesize Fonte: \cite{Hajibeygi_2020}}
     \end{figure}
 \end{frame}
 
@@ -676,10 +685,11 @@ Aplicando o teorema de Gauss na segunda integral de \eqref{eq:volumes_finitos.1}
         \coarseTransmissibility = \restOperator \spaceum \fineTransmissibility \prolOperator \\
         \coarseSourceTerm = \restOperator \vectorfineSource
     \end{gather*}
-    \begin{description}
+
+    \begin{description}[]
         \item $\vectorMsPressure$ = pressão multiescala;
         \item $\vectorCoarsePressure$ = pressão da escala grossa;
-        \item $\coarseTransmissibility$ = matrix transmissibilidade da escala grossa;
+        \item $\coarseTransmissibility$ = matriz transmissibilidade da escala grossa;
         \item $\coarseSourceTerm$ = termo fonte da escala grossa;
         \item $\coarseTransmissibility \vectorCoarsePressure = \coarseSourceTerm$ : sistema linear da escala grossa
     \end{description}
@@ -688,31 +698,38 @@ Aplicando o teorema de Gauss na segunda integral de \eqref{eq:volumes_finitos.1}
 \begin{frame}{Método Multiescala}
     
     \small
-    Devido a imposição de desacoplamento para construção do operador de prolongamento, a pressão multiescala não garante conservação da massa em todos os volumes da malha fina, fazendo-se necessária a reconstrução da velocidade \cite{Moyner_2014,Jenny2003} dada por:
+    
+    \begin{itemize}
+        \item Devido a imposição de desacoplamento para construção do operador de prolongamento, a pressão multiescala não garante conservação da massa em todos os volumes da malha fina, fazendo-se necessária a reconstrução da velocidade \cite{Moyner_2014,Jenny2003}.
+        \item Para esse fim, calcula-se o fluxo localmente, em cada volume da malha grossa primal, utilizando o fluxo do campo de pressão multiescala como condição de contorno.
+    \end{itemize}
+    
 
-    \begin{equation}
-        \label{eq:5_5_4.1}
-        \begin{cases}
-          (K \lambda_{T} \grad{\mathbf{P}''}) \cdot \vec{n} = (K \lambda_{T} \grad{\vectorMsPressure}) \text{ em } \partial \Omega_{I}\\
-          \div{K \lambda_{T} \grad{\mathbf{P}''}} = q \text{ em } \Omega_{I}\\
-        \end{cases}
-      \end{equation}
+    
 
-      \begin{columns}
-        \begin{column}{0.5\textwidth}
-            \begin{description}[]
-                \item $\lambda_{T}$: mobilidade total do fluido = $\sum_{\phase} \lambda_{\phase}$ ;
-                \item $\lambda$: mobilidade do fluido = $\nicefrac{k_{r}}{\mu}$;
-                \item $k_r$: permeabilidade relativa 
-              \end{description}
-        \end{column}
-        \begin{column}{0.5\textwidth}
-            \begin{description}[]
-                \item $\partial \Omega_{I}$: Contorno do volume $\Omega_{I}$ 
-              \end{description}
-        \end{column}
+    % \begin{equation}
+    %     \label{eq:5_5_4.1}
+    %     \begin{cases}
+    %       (K \lambda_{T} \grad{\mathbf{P}''}) \cdot \vec{n} = (K \lambda_{T} \grad{\vectorMsPressure}) \text{ em } \partial \Omega_{I}\\
+    %       \div{K \lambda_{T} \grad{\mathbf{P}''}} = q \text{ em } \Omega_{I}\\
+    %     \end{cases}
+    %   \end{equation}
 
-      \end{columns}
+    %   \begin{columns}
+    %     \begin{column}{0.5\textwidth}
+    %         \begin{description}[]
+    %             \item $\lambda_{T}$: mobilidade total do fluido = $\sum_{\phase} \lambda_{\phase}$ ;
+    %             \item $\lambda$: mobilidade do fluido = $\nicefrac{k_{r}}{\mu}$;
+    %             \item $k_r$: permeabilidade relativa 
+    %           \end{description}
+    %     \end{column}
+    %     \begin{column}{0.5\textwidth}
+    %         \begin{description}[]
+    %             \item $\partial \Omega_{I}$: Contorno do volume $\Omega_{I}$ 
+    %           \end{description}
+    %     \end{column}
+
+    %   \end{columns}
 \end{frame}
 
 % \begin{frame}{Método Multiescala}
@@ -849,7 +866,7 @@ Aplicando o teorema de Gauss na segunda integral de \eqref{eq:volumes_finitos.1}
 \end{frame}
 
 \begin{frame}{Atualização das funções de base}
-    As funções de base são atualizadas segundo \citeonline{Zhou2010}, utilizando um valor determinado pelo usuário ($\epsilon$) para verificar a variação da mobilidade de cada fase entre dois passos de tempo consecutivos ($n-1$ e $n$), segundo a seguinte equação:
+    As funções de base são atualizadas segundo \citeonline{Zhou2010}, utilizando um valor determinado pelo usuário ($\epsilon$) para verificar a variação da mobilidade de cada fase entre dois passos de tempo consecutivos ($n-1$ e $n$), conforme a seguinte equação:
 
 \begin{equation}
     \dfrac{1}{1+\epsilon} < \dfrac{\mobility_{\phase}^{n}}{\mobility_{\phase}^{n-1}}  < 1 + \epsilon  
@@ -867,14 +884,1054 @@ Aplicando o teorema de Gauss na segunda integral de \eqref{eq:volumes_finitos.1}
     
 \end{frame}
 
+\newcounter{problem}
+\renewcommand*{\theproblem}{%
+    \arabic{problem}%
+}
+
 \section{Resultados}
-\subsection{Problema 1}
-\begin{frame}{Problema 1}
+
+\refstepcounter{problem}
+\subsection{Problema \theproblem}
+\begin{frame}{Problema \theproblem: Escoamento bidimensional bifásico}
+
+    \begin{itemize}
+        \item A malha possui 80x80 volumes
+        \item pressão (P) prescrita no último volume de $13,79MPa$
+        \item vazão (Q) prescrita de injeção de água de $ 3,277 \times 10^{-8} \nicefrac{m^{3}}{s}$ no primeiro volume. 
+        \item O campo de permeabilidade é homogêneo e igual em todas as três direções cartesianas no valor de $4,9346 10^{-13} m^{2}$.
+        \item Foram aplicadas as razões de engrossamento de 7 e 5.
+    \end{itemize}
+
     
 \end{frame}
 
+\begin{frame}{Problema \theproblem}
+    \fboxrule=0pt
+\renewcommand{\arraystretch}{1.2}
+\setlength{\tabcolsep}{5pt}
+\setlength{\extrarowheight}{2pt}
+\begin{table}[!ht]
+    \small
+    \centering
+    \begin{subtable}[t]{0.48\textwidth}
+        \centering
+        \begin{tabular}{|c|c|}
+            \hline
+            $\Saturation_{\oilPhase r \waterPhase}$ & $0,35$ \\
+            \hline
+            $\Saturation_{\waterPhase r}$ & $0,2$ \\
+            \hline
+            $k_{r \waterPhase}^{0}$ & $0,2$ \\
+            \hline
+            $k_{r \oilPhase \waterPhase}^{0}$ & $1$ \\
+            \hline
+            $e_{\waterPhase}$ & $2$ \\
+            \hline
+            $e_{\oilPhase \waterPhase}$ & $2$ \\
+            \hline
+        \end{tabular}
+        \caption{Permeabilidade relativa}
+    \end{subtable}
+    \hspace{\fill}
+    \begin{subtable}{0.48\textwidth}
+        \centering
+        \begin{tabular}{|c|c|}
+            \hline
+            Pressão inicial & $13,79MPa$ \\
+            \hline
+            $\Saturation_{\waterPhase}^{0}$ & $0,2$ \\
+            \hline
+            $\porosidade$ & 0,2 \\
+            \hline
+            $\temperature$ & $288,7 K$ \\
+            \hline
+        \end{tabular}
+        \caption{Condições Iniciais}
+        \label{tab:table_prob4.b}
+    \end{subtable}
+\end{table}
+% \begin{table}[!ht]
+%     \centering
+%     \caption{Dados do Problema \theproblem}
+%     \begin{subtable}[t]{0.48\textwidth}
+%         \centering
+%         \begin{tabular}{|c|c|}
+%             \hline
+%             $\Saturation_{\oilPhase r \waterPhase}$ & $0,35$ \\
+%             \hline
+%             $\Saturation_{\waterPhase r}$ & $0,2$ \\
+%             \hline
+%             $k_{r \waterPhase}^{0}$ & $0,2$ \\
+%             \hline
+%             $k_{r \oilPhase \waterPhase}^{0}$ & $1$ \\
+%             \hline
+%             $e_{\waterPhase}$ & $2$ \\
+%             \hline
+%             $e_{\oilPhase \waterPhase}$ & $2$ \\
+%             \hline
+%         \end{tabular}
+%         \caption{Permeabilidade relativa}
+%         \label{tab:table_prob4.a}
+%     \end{subtable}
+%     \hspace{\fill}
+%     \begin{subtable}{0.48\textwidth}
+%         \centering
+%         \begin{tabular}{|c|c|}
+%             \hline
+%             Pressão inicial & $13,79MPa$ \\
+%             \hline
+%             $\Saturation_{\waterPhase}^{0}$ & $0,2$ \\
+%             \hline
+%             $\porosidade$ & 0,2 \\
+%             \hline
+%             $\temperature$ & $288,7 K$ \\
+%             \hline
+%         \end{tabular}
+%         \caption{Condições Iniciais}
+%         \label{tab:table_prob4.b}
+%     \end{subtable}
+%     \bigskip
+%     \centering
+%     \begin{subtable}{\textwidth}
+%         \centering
+%         \begin{tabular}{|c|c|c|c|}
+%             \hline
+%             Massa molar $[\nicefrac{g}{mol}]$ & $142,276$ \\
+%             \hline
+%             $\criticalT [K]$ & $619,27 $\\
+%             \hline
+%             $\criticalP[MPa]$ & $2,109$\\
+%             \hline
+%             Acentricidade & $0,489$\\
+%             \hline
+%             $\criticalV [\nicefrac{m^{3}}{mol} \times 10^{-4}]$ & $6,03$\\
+%             \hline            
+%         \end{tabular}
+%         \caption{Dados do componente hidrocarboneto}
+%         \label{tab:table_prob4.c}
+%     \end{subtable}
+%     \legend{Elaborado pelo autor}
+%     \label{tab:table_prob4}
+% \end{table}
+\end{frame}
+% \setcounter{table}{2}
+\begin{frame}{Problema \theproblem}
+    \small
+    \begin{table}[!ht]
+        \centering
+        \begin{subtable}{\textwidth}
+            \centering
+            \begin{tabular}{|c|c|c|c|}
+                \hline
+                Massa molar $[\nicefrac{g}{mol}]$ & $142,276$ \\
+                \hline
+                $\criticalT [K]$ & $619,27 $\\
+                \hline
+                $\criticalP[MPa]$ & $2,109$\\
+                \hline
+                Acentricidade & $0,489$\\
+                \hline
+                $\criticalV [\nicefrac{m^{3}}{mol} \times 10^{-4}]$ & $6,03$\\
+                \hline            
+            \end{tabular}
+            \caption{Dados do componente hidrocarboneto}
+            \label{tab:table_prob4.c}
+        \end{subtable}
+    \end{table}
+\end{frame}
+
+\newcommand{\FrameProblemName}{Problema \theproblem}
+\begin{frame}{\FrameProblemName}
+    \begin{figure}
+        \centering
+        \caption{Localização das prescrições}
+        \includegraphics[scale=0.25]{./imgs/prescricao.png}
+        \label{fig:fig3_pr4}
+    \end{figure}
+\end{frame}
+
+\begin{frame}{\FrameProblemName}
+    \begin{figure}
+        \caption{Malha dual}
+        \centering
+        \begin{subfigure}{.48\textwidth}
+            \centering
+            \includegraphics[scale=0.25]{imgs/dual_pr4_cr7.png}
+            \caption{Malha dual para Cr = 7}
+        \end{subfigure}
+        \hspace{\fill}
+        \begin{subfigure}{.48\textwidth}
+            \centering
+            \includegraphics[scale=0.25]{imgs/dual_pr4_cr5.png}
+            \caption{Malha dual para Cr = 5}
+        \end{subfigure}
+    \end{figure}
+\end{frame}
+
+\begin{frame}{\FrameProblemName}
+    \begin{figure}[!htbp]
+        \centering
+        \caption{Tempos de simulação}
+        \begin{subfigure}{.48\textwidth}
+            \centering
+            \includegraphics[scale=0.4]{./imgs/pr4/tempo_sim_cr7.png}
+            \caption{Tempo de simulação Cr=7.}
+        \end{subfigure}
+        \hfill
+        \begin{subfigure}{.48\textwidth}
+            \centering
+            \includegraphics[scale=0.4]{./imgs/pr4/total_time_cr7.png}
+            \caption{Tempo total de simulação Cr=7.}
+        \end{subfigure}
+        % \bigskip
+        % \begin{subfigure}{.48\textwidth}
+        %     \centering
+        %     \includegraphics[scale=0.55]{./imgs/pr4/tempo_sim_cr5.png}
+        %     \caption{Tempo de simulação Cr=5.}
+        % \end{subfigure}
+        % \hfill
+        % \begin{subfigure}{.48\textwidth}
+        %     \centering
+        %     \includegraphics[scale=0.57]{./imgs/pr4/total_time_cr5.png}
+        %     \caption{Tempo total de simulação Cr=5.}
+        % \end{subfigure}
+        \label{fig:fig4_pr4}
+    \end{figure}
+\end{frame}
+
+\begin{frame}{\FrameProblemName}
+    \begin{figure}[!htbp]
+        \centering
+        \caption{Tempos de simulação}
+        % \begin{subfigure}{.48\textwidth}
+        %     \centering
+        %     \includegraphics[scale=0.4]{./imgs/pr4/tempo_sim_cr7.png}
+        %     \caption{Tempo de simulação Cr=7.}
+        % \end{subfigure}
+        % \hfill
+        % \begin{subfigure}{.48\textwidth}
+        %     \centering
+        %     \includegraphics[scale=0.4]{./imgs/pr4/total_time_cr7.png}
+        %     \caption{Tempo total de simulação Cr=7.}
+        % \end{subfigure}
+        % \bigskip
+        \begin{subfigure}{.48\textwidth}
+            \centering
+            \includegraphics[scale=0.4]{./imgs/pr4/tempo_sim_cr5.png}
+            \caption{Tempo de simulação Cr=5.}
+        \end{subfigure}
+        \hfill
+        \begin{subfigure}{.48\textwidth}
+            \centering
+            \includegraphics[scale=0.4]{./imgs/pr4/total_time_cr5.png}
+            \caption{Tempo total de simulação Cr=5.}
+        \end{subfigure}
+        \label{fig:fig4.2_pr4}
+    \end{figure}
+\end{frame}
+
+\begin{frame}{\FrameProblemName}
+    \begin{figure}[!htbp]
+        \centering
+        \caption{Curvas de produção.}
+        \begin{subfigure}{.48\textwidth}
+            \centering
+            \includegraphics[scale=0.4]{./imgs/pr4/oil_prod_cr7.png}
+            \caption{Cr=7.}
+        \end{subfigure}
+        \hfill
+        \begin{subfigure}{.48\textwidth}
+            \centering
+            \includegraphics[scale=0.4]{./imgs/pr4/oil_prod_cr5.png}
+            \caption{Cr=5.}
+        \end{subfigure}
+        \label{fig:fig5_pr4}
+    \end{figure}
+\end{frame}
+
+\begin{frame}{\FrameProblemName}
+    \begin{figure}[!htbp]
+        \centering
+        \caption{Volumes Ativos.}
+        \begin{subfigure}{.48\textwidth}
+            \centering
+            \includegraphics[scale=0.4]{./imgs/pr4/active_vols_cr7.png}
+            \caption{Cr=7.}
+        \end{subfigure}
+        \hfill
+        \begin{subfigure}{.48\textwidth}
+            \centering
+            \includegraphics[scale=0.4]{./imgs/pr4/active_vols_cr5.png}
+            \caption{Cr=5.}
+        \end{subfigure}
+    
+        % \legend{Fonte: Elaborado pelo autor.}
+        \label{fig:fig6_pr4}
+    \end{figure}
+\end{frame}
+
+\begin{frame}{\FrameProblemName}
+    \begin{figure}[!htbp]
+        \centering
+        \caption{Malha NU-ADM}
+        \begin{subfigure}{.48\textwidth}
+            \centering
+            \includegraphics[height=4.6cm]{./imgs/pr4/sat_cr7.png}
+            \caption{Saturação de água Cr=7. Vermelho = 0,65, Azul = 0,2}
+        \end{subfigure}
+        \hfill
+        \begin{subfigure}{.48\textwidth}
+            \centering
+            \includegraphics[height=4.7cm]{./imgs/pr4/nivel_cr7.png}
+            \caption{Nível Cr=7. Azul=0, Vermelho=1}
+        \end{subfigure}
+        % \bigskip
+        % \begin{subfigure}{.48\textwidth}
+        %     \centering
+        %     \includegraphics[scale=0.4]{./imgs/pr4/sat_cr5.png}
+        %     \caption{Saturação de água Cr=5. Vermelho = 0,65, Azul = 0,2}
+        % \end{subfigure}
+        % \hfill
+        % \begin{subfigure}{.48\textwidth}
+        %     \centering
+        %     \includegraphics[scale=0.41]{./imgs/pr4/nivel_cr5.png}
+        %     \caption{Nível Cr=5. Azul=0, Vermelho=1}
+        % \end{subfigure}
+    
+        % \legend{Fonte: Elaborado pelo autor.}
+        \label{fig:fig7_pr4}
+    \end{figure}
+\end{frame}
+
+\begin{frame}{\FrameProblemName}
+    \begin{figure}[!htbp]
+        \centering
+        \caption{Malha NU-ADM}
+        % \begin{subfigure}{.48\textwidth}
+        %     \centering
+        %     \includegraphics[height=4.6cm]{./imgs/pr4/sat_cr7.png}
+        %     \caption{Saturação de água Cr=7. Vermelho = 0,65, Azul = 0,2}
+        % \end{subfigure}
+        % \hfill
+        % \begin{subfigure}{.48\textwidth}
+        %     \centering
+        %     \includegraphics[height=4.7cm]{./imgs/pr4/nivel_cr7.png}
+        %     \caption{Nível Cr=7. Azul=0, Vermelho=1}
+        % \end{subfigure}
+        % \bigskip
+        \begin{subfigure}{.48\textwidth}
+            \centering
+            \includegraphics[height=4.6cm]{./imgs/pr4/sat_cr5.png}
+            \caption{Saturação de água Cr=5. Vermelho = 0,65, Azul = 0,2}
+        \end{subfigure}
+        \hfill
+        \begin{subfigure}{.48\textwidth}
+            \centering
+            \includegraphics[height=4.7cm]{./imgs/pr4/nivel_cr5.png}
+            \caption{Nível Cr=5. Azul=0, Vermelho=1}
+        \end{subfigure}
+    
+        % \legend{Fonte: Elaborado pelo autor.}
+        \label{fig:fig7_pr4}
+    \end{figure}
+\end{frame}
+
+\refstepcounter{problem}
+\subsection{Problema \theproblem}
+
+\begin{frame}{\FrameProblemName}
+
+    \begin{itemize}
+        \item Escoamento trifásico, 1D e com 6 componentes hidrocarbonetos. 
+        \item A malha possui 512 volumes 
+        \item Vazão prescrita de injeção de água no primeiro volume de $4.1377 \times 10^{-4} \nicefrac{m^{3}}{s}$. 
+        \item No último volume da malha há pressão prescrita de $8, 96MPa$. 
+        \item O coeficiente de interação binária entre os componentes é zero.
+        \item  Campo de permeabilidade homogêneo e igual em todas as três direções cartesianas no valor de $10^{-14} m^{2}$.
+    \end{itemize}
+    
+\end{frame}
+
+\begin{frame}{\FrameProblemName}
+    \fboxrule=0pt
+\renewcommand{\arraystretch}{1.2}
+\setlength{\tabcolsep}{5pt}
+\setlength{\extrarowheight}{2pt}
+\begin{table}[!ht]
+    \footnotesize
+    \centering
+    % \caption{Dados do Problema \theproblem}
+    \begin{subtable}[t]{0.48\textwidth}
+        \centering
+        \begin{tabular}{|c|c|c|c|}
+            \hline
+            $\Saturation_{\oilPhase r \gasPhase}$ & $0$ & $k_{r \oilPhase \waterPhase}^{0}$ & $0,9$ \\
+            \hline
+            $\Saturation_{\oilPhase r \waterPhase}$ & $0,1$ & $k_{r \oilPhase \gasPhase}^{0}$ & $0,9$ \\
+            \hline
+            $\Saturation_{\gasPhase r}$ & 0 & $e_{\waterPhase}$ & $2$ \\
+            \hline
+            $\Saturation_{\waterPhase r}$ & $0,3$ & $e_{\oilPhase \gasPhase}$ & $2$\\
+            \hline
+            $k_{r \gasPhase}^{0}$ & $0,9$ & $e_{\oilPhase \waterPhase}$ & $2$\\
+            \hline
+            $k_{r \waterPhase}^{0}$ & $0,4$ & $e_{\gasPhase}$ & $2$\\
+            \hline
+        \end{tabular}
+        \caption{Permeabilidade relativa}
+        \label{tab:table_prob3.a}
+    \end{subtable}
+    % \hspace{\fill}
+    \begin{subtable}{0.48\textwidth}
+        \centering
+        \begin{tabular}{|c|c|}
+            \hline
+            Pressão inicial & $10,34MPa$ \\
+            \hline
+            $\Saturation_{\waterPhase}^{0}$ & 0,3 \\
+            \hline
+            $\porosidade$ & 0,35 \\
+            \hline
+            $\temperature$ & $344,25 K$ \\
+            \hline
+            \rowcolor{gray!40}
+            \multicolumn{2}{|Sc|}{ Composição inicial} \\
+            \hline
+            C1 & $0,5$ \\
+            \hline         
+            C2 & $0,03$ \\
+            \hline         
+            C3 & $0,07$ \\       
+            \hline  
+            C4 & $0,2$ \\       
+            \hline  
+            C5 & $0,15$ \\       
+            \hline  
+            C6 & $0,05$ \\       
+            \hline  
+        \end{tabular}
+        \caption{Condições Iniciais}
+        \label{tab:table_prob3.b}
+    \end{subtable}
+    \end{table}
+\end{frame}
+
+\begin{frame}{\FrameProblemName}
+    \begin{table}
+        \small
+        \centering
+        \begin{subtable}{\textwidth}
+            \centering
+            \begin{tabular}{|c|c|c|c|c|c|c|}
+                \hline
+                 & C1 & C2 & C3 & C4 & C5 & C6 \\
+                \hline
+                Massa molar $[\nicefrac{g}{mol}]$ & $16,042 $ & $44,1$ & $86,178$ & $142,276$ & $212,41$ & $282,5$\\
+                \hline
+                $\criticalT$ $[K]$ & $190,6 $ & $369,8$ & $507,4$ & $617,6$ & $708$ & $768$\\
+                \hline
+                $\criticalP$ $[MPa]$ & $4,6$ & $4,24$ & $2,96$ & $2,11$ & $1,47$ & $1,17$\\
+                \hline
+                Acentricidade & $0,008$ & $0,152$ & $0,299$ & $0,489$ & $0,685$ & $0,912$\\
+                \hline
+                $\criticalV$ $[\nicefrac{m^{3}}{mol} \times 10^{-4}]$ & $0,99 $ & $2.03$ & $3,7$ & $6,03$ & $8,95$ & $16,9$\\
+                \hline            
+            \end{tabular}
+            \caption{Dados dos componentes}
+            \label{tab:table_prob3.c}
+        \end{subtable}
+    \end{table}
+    
+\end{frame}
+
+\begin{frame}{\FrameProblemName: {\small Resultados com Cr=64 sem atualizar as funções de base.}}
+    \begin{figure}[!ht]
+        \centering
+        
+        \begin{subfigure}{.48\textwidth}
+            \centering
+            \includegraphics[height=2.5cm]{./imgs/pr3/cr64/no_update/svgtopng/gas_prod.png}
+            \caption{Produção de gás}
+        \end{subfigure}
+        \hfill
+        \begin{subfigure}{.48\textwidth}
+            \centering
+            \includegraphics[height=2.5cm]{./imgs/pr3/cr64/no_update/svgtopng/oil_prod.png}
+            \caption{Produção de óleo}
+        \end{subfigure}
+        \bigskip
+        \begin{subfigure}{\textwidth}
+            \centering
+            \includegraphics[height=2.5cm]{./imgs/pr3/cr64/no_update/svgtopng/volumes_ativos.png}
+            \caption{Volumes ativos}
+        \end{subfigure}
+        % \legend{Fonte: Elaborado pelo autor.}
+        % \label{fig:fig1_pr3-cr64}
+        
+    \end{figure}
+\end{frame}
+
+\begin{frame}{\FrameProblemName: {\small Resultados com Cr=64 atualizando as funções de base.}}
+    \begin{figure}[!ht]
+        \centering
+        % \caption{Resultados com Cr=64 atualizando as funções de base.}
+        \begin{subfigure}{.48\textwidth}
+            \centering
+            \includegraphics[height=2.5cm]{./imgs/pr3/cr64/update/svgtopng/gas_prod.png}
+            \caption{Produção de gás}
+        \end{subfigure}
+        \hfill
+        \begin{subfigure}{.48\textwidth}
+            \centering
+            \includegraphics[height=2.5cm]{./imgs/pr3/cr64/update/svgtopng/oil_prod.png}
+            \caption{Produção de óleo}
+        \end{subfigure}
+        \bigskip
+        \begin{subfigure}{.48\textwidth}
+            \centering
+            \includegraphics[height=2.5cm]{./imgs/pr3/cr64/update/svgtopng/volumes_ativos.png}
+            \caption{Volumes ativos}
+        \end{subfigure}
+        \hfill
+        \begin{subfigure}{.48\textwidth}
+            \centering
+            \includegraphics[height=2.5cm]{./imgs/pr3/cr64/update/svgtopng/volumes_update.png}
+            \caption{Quantidade de volumes para atualizar as funções de base}
+        \end{subfigure}
+        % \legend{Fonte: Elaborado pelo autor.}
+        \label{fig:fig2_pr3-cr64}
+        
+    \end{figure}
+    
+\end{frame}
+
+\begin{frame}{\FrameProblemName: {\small Tempos de simulação com Cr=64.}}
+    \begin{figure}[!h]
+        \centering
+        % \caption{Tempos de simulação com Cr=64.}
+        \begin{subfigure}{.48\textwidth}
+            \centering
+            \includegraphics[height=2.5cm]{./imgs/pr3/cr64/no_update/svgtopng/tempo_simulacao.png}
+            \caption{Tempo de simulação sem atualizar as funções de base}
+        \end{subfigure}
+        \hfill
+        \begin{subfigure}{.48\textwidth}
+            \centering
+            \includegraphics[height=2.5cm]{./imgs/pr3/cr64/no_update/svgtopng/tempo_total.png}
+            \caption{Tempo total de simulação sem atualizar as funções de base}
+        \end{subfigure}
+        \bigskip
+        \begin{subfigure}{.48\textwidth}
+            \centering
+            \includegraphics[height=2.5cm]{./imgs/pr3/cr64/update/svgtopng/tempo_simulacao.png}
+            \caption{Tempo de simulação atualizando as funções de base}
+        \end{subfigure}
+        \hfill
+        \begin{subfigure}{.48\textwidth}
+            \centering
+            \includegraphics[height=2.5cm]{./imgs/pr3/cr64/update/svgtopng/tempo_total.png}
+            \caption{Tempo total de simulação atualizando as funções de base}
+        \end{subfigure}
+        % \legend{Fonte: Elaborado pelo autor.}
+        \label{fig:fig3_pr3-cr64}
+    \end{figure}
+    
+\end{frame}
+
+\begin{frame}{\FrameProblemName: {\small Resultados com Cr=16 sem atualizar as funções de base.}}
+    \begin{figure}[!ht]
+        \centering
+        % \caption{Resultados com Cr=16 sem atualizar as funções de base.}
+        \begin{subfigure}{.48\textwidth}
+            \centering
+            \includegraphics[height=2.5cm]{./imgs/pr3/cr16/no_update/gas_prod.png}
+            \caption{Produção de gás}
+        \end{subfigure}
+        \hfill
+        \begin{subfigure}{.48\textwidth}
+            \centering
+            \includegraphics[height=2.5cm]{./imgs/pr3/cr16/no_update/oil_prod.png}
+            \caption{Produção de óleo}
+        \end{subfigure}
+        \bigskip
+        \begin{subfigure}{\textwidth}
+            \centering
+            \includegraphics[height=2.5cm]{./imgs/pr3/cr16/no_update/volumes_ativos.png}
+            \caption{Volumes ativos}
+        \end{subfigure}
+        % \legend{Fonte: Elaborado pelo autor.}
+        \label{fig:fig4_pr3-cr16}
+        
+    \end{figure}
+    
+\end{frame}
+
+\begin{frame}{\FrameProblemName: {\small Resultados com Cr=16 atualizando as funções de base.}}
+    \begin{figure}[!ht]
+        \centering
+        % \caption{Resultados com Cr=16 atualizando as funções de base.}
+        \begin{subfigure}{.48\textwidth}
+            \centering
+            \includegraphics[height=2.5cm]{./imgs/pr3/cr16/Update/gas_prod.png}
+            \caption{Produção de gás}
+        \end{subfigure}
+        \hfill
+        \begin{subfigure}{.48\textwidth}
+            \centering
+            \includegraphics[height=2.5cm]{./imgs/pr3/cr16/Update/oil_prod.png}
+            \caption{Produção de óleo}
+        \end{subfigure}
+        \bigskip
+        \begin{subfigure}{.48\textwidth}
+            \centering
+            \includegraphics[height=2.5cm]{./imgs/pr3/cr16/Update/volumes_ativos.png}
+            \caption{Volumes ativos}
+        \end{subfigure}
+        \hfill
+        \begin{subfigure}{.48\textwidth}
+            \centering
+            \includegraphics[height=2.5cm]{./imgs/pr3/cr16/Update/volumes_update.png}
+            \caption{Quantidade de volumes para atualizar as funções de base}
+        \end{subfigure}
+        % \legend{Fonte: Elaborado pelo autor.}
+        \label{fig:fig5_pr3-cr16}
+        
+    \end{figure}
+\end{frame}
+
+\begin{frame}{\FrameProblemName: {\small Tempos de simulação com Cr=16.}}
+    \begin{figure}[!h]
+        \centering
+        % \caption{Tempos de simulação com Cr=16.}
+        \begin{subfigure}{.48\textwidth}
+            \centering
+            \includegraphics[height=2.5cm]{./imgs/pr3/cr16/no_update/tempo_simulacao.png}
+            \caption{Tempo de simulação sem atualizar as funções de base}
+        \end{subfigure}
+        \hfill
+        \begin{subfigure}{.48\textwidth}
+            \centering
+            \includegraphics[height=2.5cm]{./imgs/pr3/cr16/no_update/tempo_total.png}
+            \caption{Tempo total de simulação sem atualizar as funções de base}
+        \end{subfigure}
+        \bigskip
+        \begin{subfigure}{.48\textwidth}
+            \centering
+            \includegraphics[height=2.5cm]{./imgs/pr3/cr16/Update/tempo_simulacao.png}
+            \caption{Tempo de simulação atualizando as funções de base}
+        \end{subfigure}
+        \hfill
+        \begin{subfigure}{.48\textwidth}
+            \centering
+            \includegraphics[height=2.5cm]{./imgs/pr3/cr16/Update/tempo_total.png}
+            \caption{Tempo total de simulação atualizando as funções de base}
+        \end{subfigure}
+    
+        % \legend{Fonte: Elaborado pelo autor.}
+        \label{fig:fig6_pr3-cr16}
+    \end{figure}
+    
+\end{frame}
+
+\begin{frame}{\FrameProblemName: {\small Resultados com Cr=100 sem atualizar as funções de base.}}
+    \begin{figure}[!ht]
+        \centering
+        % \caption{Resultados com Cr=100 sem atualizar as funções de base.}
+        \begin{subfigure}{.48\textwidth}
+            \centering
+            \includegraphics[height=2.5cm]{./imgs/pr3/cr100/no_update/svgtopng/gas_prod.png}
+            \caption{Produção de gás}
+        \end{subfigure}
+        \hfill
+        \begin{subfigure}{.48\textwidth}
+            \centering
+            \includegraphics[height=2.5cm]{./imgs/pr3/cr100/no_update/svgtopng/oil_prod.png}
+            \caption{Produção de óleo}
+        \end{subfigure}
+        \bigskip
+        \begin{subfigure}{\textwidth}
+            \centering
+            \includegraphics[height=2.5cm]{./imgs/pr3/cr100/no_update/svgtopng/volumes_ativos.png}
+            \caption{Volumes ativos}
+        \end{subfigure}
+        % \legend{Fonte: Elaborado pelo autor.}
+        \label{fig:fig7_pr3-cr100}
+        
+    \end{figure}
+\end{frame}
+
+\begin{frame}{\FrameProblemName: {\small Resultados com Cr=100 atualizando as funções de base.}}
+    \begin{figure}[!ht]
+        \centering
+        % \caption{Resultados com Cr=100 atualizando as funções de base.}
+        \begin{subfigure}[t]{.48\textwidth}
+            \centering
+            \includegraphics[height=2.5cm]{./imgs/pr3/cr100/update/svgtopng/gas_prod.png}
+            \caption{Produção de gás}
+        \end{subfigure}
+        \hfill
+        \begin{subfigure}[t]{.48\textwidth}
+            \centering
+            \includegraphics[height=2.5cm]{./imgs/pr3/cr100/update/svgtopng/oil_prod.png}
+            \caption{Produção de óleo}
+        \end{subfigure}
+        \bigskip
+        \begin{subfigure}[t]{.48\textwidth}
+            \centering
+            \includegraphics[height=2.5cm]{./imgs/pr3/cr100/update/svgtopng/volumes_ativos.png}
+            \caption{Volumes ativos}
+        \end{subfigure}
+        \hfill
+        \begin{subfigure}[t]{.48\textwidth}
+            \centering
+            \includegraphics[height=2.5cm]{./imgs/pr3/cr100/update/svgtopng/n_volumes_update.png}
+            \caption{Quantidade de volumes para atualizar as funções de base}
+        \end{subfigure}
+        % \legend{Fonte: Elaborado pelo autor.}
+        \label{fig:fig8_pr3-cr100}
+        
+    \end{figure}
+    
+\end{frame}
+
+\begin{frame}{\FrameProblemName: {\small Tempos de simulação com Cr=100.}}
+    \begin{figure}[!h]
+        \centering
+        % \caption{Tempos de simulação com Cr=100.}
+        \begin{subfigure}{.48\textwidth}
+            \centering
+            \includegraphics[height=2.5cm]{./imgs/pr3/cr100/no_update/svgtopng/tempo_de_simulacao.png}
+            \caption{Tempo de simulação sem atualizar as funções de base}
+        \end{subfigure}
+        \hfill
+        \begin{subfigure}{.48\textwidth}
+            \centering
+            \includegraphics[height=2.5cm]{./imgs/pr3/cr100/no_update/svgtopng/tempo_total.png}
+            \caption{Tempo total de simulação sem atualizar as funções de base}
+        \end{subfigure}
+        \bigskip
+        \begin{subfigure}[t]{.48\textwidth}
+            \centering
+            \includegraphics[height=2.5cm]{./imgs/pr3/cr16/Update/tempo_simulacao.png}
+            \caption{Tempo de simulação atualizando as funções de base}
+        \end{subfigure}
+        \hfill
+        \begin{subfigure}[t]{.48\textwidth}
+            \centering
+            \includegraphics[height=2.5cm]{./imgs/pr3/cr16/Update/tempo_total.png}
+            \caption{Tempo total de simulação atualizando as funções de base}
+        \end{subfigure}
+    
+        % \legend{Fonte: Elaborado pelo autor.}
+        \label{fig:fig9_pr3-cr100}
+    \end{figure}
+\end{frame}
+
+\refstepcounter{problem}
+\subsection{Problema \theproblem}
+
+\begin{frame}{\FrameProblemName}
+    \begin{itemize}
+        \item Escoamento 1D com 3 componentes hidrocarbonetos e com duas fases (óleo e gás). 
+        \item A malha possui 5000 volumes 
+        \item Pressão prescrita no primeiro volume de $7MPa$ e composição prescrita de injeção de $0,9$ do componente C1 e $0,1$ do componente C2. 
+        \item No último volume da malha há pressão prescrita de $6MPa$. 
+        \item O coeficiente de interação binária entre os componentes é zero 
+        \item A dimensão dos volumes na direção x é de $0,01m$. 
+        \item Campo de permeabilidade homogêneo no valor de $10^{-15} m^{2}$.
+        \item Foram utilizadas as razões de engrossamento de 20, 50 e 100.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{\FrameProblemName: {\small Resultados com Cr=20 sem atualizar as funções de base.}}
+    \begin{figure}[!ht]
+        \centering
+        % \caption{Resultados com Cr=20 sem atualizar as funções de base.}
+        \begin{subfigure}{.48\textwidth}
+            \centering
+            \includegraphics[height=2.5cm]{./imgs/pr2/3k_5000x1x1/cr 20/v2/no_update/svgtopng/figura_case-finescale_3k_5000_CR20_no__updateGas_production.png}
+            \caption{Produção de gás}
+        \end{subfigure}
+        \hfill
+        \begin{subfigure}{.48\textwidth}
+            \centering
+            \includegraphics[height=2.5cm]{./imgs/pr2/3k_5000x1x1/cr 20/v2/no_update/svgtopng/figura_case-finescale_3k_5000_CR20_no__updateOil_production.png}
+            \caption{Produção de óleo}
+        \end{subfigure}
+        \bigskip
+        \begin{subfigure}{\textwidth}
+            \centering
+            \includegraphics[height=2.5cm]{./imgs/pr2/3k_5000x1x1/cr 20/v2/no_update/svgtopng/figura_case-finescale_3k_5000_CR20_no__updateActive_volumes.png}
+            \caption{Volumes ativos}
+        \end{subfigure}
+        % \legend{Fonte: Elaborado pelo autor.}
+        \label{fig:fig1_pr2-cr20}
+        
+    \end{figure}
+\end{frame}
+
+\begin{frame}{\FrameProblemName: {\small Resultados com Cr=20 atualizando as funções de base.}}
+    \begin{figure}[!ht]
+        \centering
+        % \caption{Resultados com Cr=20 atualizando as funções de base.}
+        \begin{subfigure}{.48\textwidth}
+            \centering
+            \includegraphics[height=2.5cm   ]{./imgs/pr2/3k_5000x1x1/cr 20/v2/update/svgtopng/figura_case-finescale_3k_5000_CR20_updateGas_production.png}
+            \caption{Produção de gás}
+        \end{subfigure}
+        \hfill
+        \begin{subfigure}{.48\textwidth}
+            \centering
+            \includegraphics[height=2.5cm]{./imgs/pr2/3k_5000x1x1/cr 20/v2/update/svgtopng/figura_case-finescale_3k_5000_CR20_updateOil_production.png}
+            \caption{Produção de óleo}
+        \end{subfigure}
+        \bigskip
+        \begin{subfigure}{.48\textwidth}
+            \centering
+            \includegraphics[height=2.5cm]{./imgs/pr2/3k_5000x1x1/cr 20/v2/update/svgtopng/figura_case-finescale_3k_5000_CR20_updateActive_volumes.png}
+            \caption{Volumes ativos}
+        \end{subfigure}
+        \hfill
+        \begin{subfigure}{.48\textwidth}
+            \centering
+            \includegraphics[height=2.5cm]{./imgs/pr2/3k_5000x1x1/cr 20/v2/update/svgtopng/figura_case-finescale_3k_5000_CR20_updateTotal volumes.png}
+            \caption{Quantidade de volumes para atualizar as funções de base}
+        \end{subfigure}
+        % \legend{Fonte: Elaborado pelo autor.}
+        \label{fig:fig2_pr2-cr20}
+        
+    \end{figure}
+\end{frame}
+
+\begin{frame}{\FrameProblemName: {\small Tempos de simulação com Cr=20.}}
+    \begin{figure}[!h]
+        \centering
+        % \caption{Tempos de simulação com Cr=20.}
+        \begin{subfigure}{.48\textwidth}
+            \centering
+            \includegraphics[height=2.5cm]{./imgs/pr2/3k_5000x1x1/cr 20/v2/no_update/svgtopng/figura_case-finescale_3k_5000_CR20_no__updateTempo de simulaçãoActive_volumes.png}
+            \caption{Tempo de simulação sem atualizar as funções de base}
+        \end{subfigure}
+        \hfill
+        \begin{subfigure}{.48\textwidth}
+            \centering
+            \includegraphics[height=2.5cm]{./imgs/pr2/3k_5000x1x1/cr 20/v2/no_update/svgtopng/figura_case-finescale_3k_5000_CR20_no__updateTotal_simulation_time.png}
+            \caption{Tempo total de simulação sem atualizar as funções de base}
+        \end{subfigure}
+        \bigskip
+        \begin{subfigure}[t]{.48\textwidth}
+            \centering
+            \includegraphics[height=2.5cm]{./imgs/pr2/3k_5000x1x1/cr 20/v2/update/svgtopng/figura_case-finescale_3k_5000_CR20_updateTempo de simulaçãoActive_volumes.png}
+            \caption{Tempo de simulação atualizando as funções de base}
+        \end{subfigure}
+        \hfill
+        \begin{subfigure}[t]{.48\textwidth}
+            \centering
+            \includegraphics[height=2.5cm]{./imgs/pr2/3k_5000x1x1/cr 20/v2/update/svgtopng/figura_case-finescale_3k_5000_CR20_updateTotal_simulation_time.png}
+            \caption{Tempo total de simulação atualizando as funções de base}
+        \end{subfigure}
+    
+        % \legend{Fonte: Elaborado pelo autor.}
+        \label{fig:fig3_pr3-cr20}
+    \end{figure}
+\end{frame}
+
+\begin{frame}{\FrameProblemName: {\small Resultados com Cr=50 sem atualizar as funções de base.}}
+    \begin{figure}[!ht]
+        \centering
+        % \caption{Resultados com Cr=50 sem atualizar as funções de base.}
+        \begin{subfigure}{.48\textwidth}
+            \centering
+            \includegraphics[height=2.5cm]{./imgs/pr2/3k_5000x1x1/cr 50/v2/no_update/svgtopng/figura_case-finescale_3k_5000_CR50_no_updateGas_production.png}
+            \caption{Produção de gás}
+        \end{subfigure}
+        \hfill
+        \begin{subfigure}{.48\textwidth}
+            \centering
+            \includegraphics[height=2.5cm]{./imgs/pr2/3k_5000x1x1/cr 50/v2/no_update/svgtopng/figura_case-finescale_3k_5000_CR50_no_updateOil_production.png}
+            \caption{Produção de óleo}
+        \end{subfigure}
+        \bigskip
+        \begin{subfigure}{\textwidth}
+            \centering
+            \includegraphics[height=2.5cm]{./imgs/pr2/3k_5000x1x1/cr 50/v2/no_update/svgtopng/figura_case-finescale_3k_5000_CR50_no_updateActive_volumes.png}
+            \caption{Volumes ativos}
+        \end{subfigure}
+        % \legend{Fonte: Elaborado pelo autor.}
+        \label{fig:fig4_pr2-cr50}
+        
+    \end{figure}
+    
+\end{frame}
+
+\begin{frame}{\FrameProblemName: {\small Resultados com Cr=50 atualizando as funções de base.}}
+    \begin{figure}[!ht]
+        \centering
+        % \caption{Resultados com Cr=50 atualizando as funções de base.}
+        \begin{subfigure}{.48\textwidth}
+            \centering
+            \includegraphics[height=2.5cm]{./imgs/pr2/3k_5000x1x1/cr 50/v2/update/svgtopng/figura_case-finescale_3k_5000_CR50_updateGas_production.png}
+            \caption{Produção de gás}
+        \end{subfigure}
+        \hfill
+        \begin{subfigure}{.48\textwidth}
+            \centering
+            \includegraphics[height=2.5cm]{./imgs/pr2/3k_5000x1x1/cr 50/v2/update/svgtopng/figura_case-finescale_3k_5000_CR50_updateOil_production.png}
+            \caption{Produção de óleo}
+        \end{subfigure}
+        \bigskip
+        \begin{subfigure}{.48\textwidth}
+            \centering
+            \includegraphics[height=2.5cm]{./imgs/pr2/3k_5000x1x1/cr 50/v2/update/svgtopng/figura_case-finescale_3k_5000_CR50_updateActive_volumes.png}
+            \caption{Volumes ativos}
+        \end{subfigure}
+        \hfill
+        \begin{subfigure}{.48\textwidth}
+            \centering
+            \includegraphics[height=2.5cm]{./imgs/pr2/3k_5000x1x1/cr 50/v2/update/svgtopng/figura_case-finescale_3k_5000_CR50_updateTotal volumes.png}
+            \caption{Quantidade de volumes para atualizar as funções de base}
+        \end{subfigure}
+        % \legend{Fonte: Elaborado pelo autor.}
+        \label{fig:fig5_pr2-cr50}
+        
+    \end{figure}
+\end{frame}
+
+\begin{frame}{\FrameProblemName: {\small Tempos de simulação com Cr=50.}}
+    \begin{figure}[!h]
+        \centering
+        % \caption{Tempos de simulação com Cr=50.}
+        \begin{subfigure}{.48\textwidth}
+            \centering
+            \includegraphics[height=2.5cm]{./imgs/pr2/3k_5000x1x1/cr 50/v2/no_update/svgtopng/figura_case-finescale_3k_5000_CR50_no_updateTempo de simulaçãoActive_volumes.png}
+            \caption{Tempo de simulação sem atualizar as funções de base}
+        \end{subfigure}
+        \hfill
+        \begin{subfigure}{.48\textwidth}
+            \centering
+            \includegraphics[height=2.5cm]{./imgs/pr2/3k_5000x1x1/cr 50/v2/no_update/svgtopng/figura_case-finescale_3k_5000_CR50_no_updateTotal_simulation_time.png}
+            \caption{Tempo total de simulação sem atualizar as funções de base}
+        \end{subfigure}
+        \bigskip
+        \begin{subfigure}[t]{.48\textwidth}
+            \centering
+            \includegraphics[height=2.5cm]{./imgs/pr2/3k_5000x1x1/cr 50/v2/update/svgtopng/figura_case-finescale_3k_5000_CR50_updateTempo de simulaçãoActive_volumes.png}
+            \caption{Tempo de simulação atualizando as funções de base}
+        \end{subfigure}
+        \hfill
+        \begin{subfigure}[t]{.48\textwidth}
+            \centering
+            \includegraphics[height=2.5cm]{./imgs/pr2/3k_5000x1x1/cr 50/v2/update/svgtopng/figura_case-finescale_3k_5000_CR50_updateTotal_simulation_time.png}
+            \caption{Tempo total de simulação atualizando as funções de base}
+        \end{subfigure}
+    
+        % \legend{Fonte: Elaborado pelo autor.}
+        \label{fig:fig6_pr2-cr50}
+    \end{figure}
+\end{frame}
+
+\begin{frame}{\FrameProblemName: {\small Resultados com Cr=100 sem atualizar as funções de base.}}
+    \begin{figure}[!ht]
+        \centering
+        % \caption{Resultados com Cr=100 sem atualizar as funções de base.}
+        \begin{subfigure}{.48\textwidth}
+            \centering
+            \includegraphics[height=2.5cm]{./imgs/pr2/3k_5000x1x1/cr 100/3k_5000_cr100_no_update/svgtopng/figura_case-finescale_3k_5000_CR100_no_updateGas_production.png}
+            \caption{Produção de gás}
+        \end{subfigure}
+        \hfill
+        \begin{subfigure}{.48\textwidth}
+            \centering
+            \includegraphics[height=2.5cm]{./imgs/pr2/3k_5000x1x1/cr 100/3k_5000_cr100_no_update/svgtopng/figura_case-finescale_3k_5000_CR100_no_updateOil_production.png}
+            \caption{Produção de óleo}
+        \end{subfigure}
+        \bigskip
+        \begin{subfigure}{\textwidth}
+            \centering
+            \includegraphics[height=2.5cm]{./imgs/pr2/3k_5000x1x1/cr 100/3k_5000_cr100_no_update/svgtopng/figura_case-finescale_3k_5000_CR100_no_updateActive_volumes.png}
+            \caption{Volumes ativos}
+        \end{subfigure}
+        % \legend{Fonte: Elaborado pelo autor.}
+        \label{fig:fig7_pr2-cr100}
+        
+    \end{figure}
+\end{frame}
+
+\begin{frame}{\FrameProblemName: {\small Resultados com Cr=100 atualizando as funções de base.}}
+    \begin{figure}[!ht]
+        \centering
+        % \caption{Resultados com Cr=100 atualizando as funções de base.}
+        \begin{subfigure}{.48\textwidth}
+            \centering
+            \includegraphics[height=2.5cm]{./imgs/pr2/3k_5000x1x1/cr 100/3k_5000_cr100_update/svgtopng/figura_case-finescale_3k_5000_CR100_updateGas_production.png}
+            \caption{Produção de gás}
+        \end{subfigure}
+        \hfill
+        \begin{subfigure}{.48\textwidth}
+            \centering
+            \includegraphics[height=2.5cm]{./imgs/pr2/3k_5000x1x1/cr 100/3k_5000_cr100_update/svgtopng/figura_case-finescale_3k_5000_CR100_updateOil_production.png}
+            \caption{Produção de óleo}
+        \end{subfigure}
+        \bigskip
+        \begin{subfigure}{.48\textwidth}
+            \centering
+            \includegraphics[height=2.5cm]{./imgs/pr2/3k_5000x1x1/cr 100/3k_5000_cr100_update/svgtopng/figura_case-finescale_3k_5000_CR100_updateActive_volumes.png}
+            \caption{Volumes ativos}
+        \end{subfigure}
+        \hfill
+        \begin{subfigure}{.48\textwidth}
+            \centering
+            \includegraphics[height=2.5cm]{./imgs/pr2/3k_5000x1x1/cr 100/3k_5000_cr100_update/svgtopng/figura_case-finescale_3k_5000_CR100_updateTotal volumes.png}
+            \caption{Quantidade de volumes para atualizar as funções de base}
+        \end{subfigure}
+        % \legend{Fonte: Elaborado pelo autor.}
+        \label{fig:fig8_pr2-cr100}
+        
+    \end{figure}
+\end{frame}
+
+\begin{frame}{\FrameProblemName: {\small Tempos de simulação com Cr=100.}}
+    \begin{figure}[!h]
+        \centering
+        % \caption{Tempos de simulação com Cr=100.}
+        \begin{subfigure}{.48\textwidth}
+            \centering
+            \includegraphics[height=2.5cm]{./imgs/pr2/3k_5000x1x1/cr 100/3k_5000_cr100_no_update/svgtopng/figura_case-finescale_3k_5000_CR100_no_updateTempo de simulaçãoActive_volumes.png}
+            \caption{Tempo de simulação sem atualizar as funções de base}
+        \end{subfigure}
+        \hfill
+        \begin{subfigure}{.48\textwidth}
+            \centering
+            \includegraphics[height=2.5cm]{./imgs/pr2/3k_5000x1x1/cr 100/3k_5000_cr100_no_update/svgtopng/figura_case-finescale_3k_5000_CR100_no_updateTotal_simulation_time.png}
+            \caption{Tempo total de simulação sem atualizar as funções de base}
+        \end{subfigure}
+        \bigskip
+        \begin{subfigure}[t]{.48\textwidth}
+            \centering
+            \includegraphics[height=2.5cm]{./imgs/pr2/3k_5000x1x1/cr 100/3k_5000_cr100_update/svgtopng/figura_case-finescale_3k_5000_CR100_updateTempo de simulaçãoActive_volumes.png}
+            \caption{Tempo de simulação atualizando as funções de base}
+        \end{subfigure}
+        \hfill
+        \begin{subfigure}[t]{.48\textwidth}
+            \centering
+            \includegraphics[height=2.5cm]{./imgs/pr2/3k_5000x1x1/cr 100/3k_5000_cr100_update/svgtopng/figura_case-finescale_3k_5000_CR100_updateTotal_simulation_time.png}
+            \caption{Tempo total de simulação atualizando as funções de base}
+        \end{subfigure}
+    
+        % \legend{Fonte: Elaborado pelo autor.}
+        \label{fig:fig9_pr2-cr100}
+    \end{figure}
+\end{frame}
+
+
+
 \section{Conclusões}
 \begin{frame}{Conclusões}
+
+    Para a verificar a acurácia do método NU-ADM e os tempos de simulação, foram utilizados um exemplo bidimensional bifásico e dois unidimensionais trifásicos, todos sendo simulados em modo serial. No primeiro exemplo, com apenas um componente na fase óleo, foi possível observar como se comporta o refinamento da malha NU-ADM na frente de saturação de acordo com $\Delta \Saturation_{lim}$ e que a solução NU-ADM se aproxima da solução obtida diretamente na malha fina. 
+
+Nos outros dois exemplos (um com 6 componentes hidrocarbonetos e o outro com três) foram verificados a acurácia do método NU-ADM e os tempos de simulação com diferentes razões de engrossamento. No primeiro notou-se uma melhor \textit{performance} com a razão de engrossamento intermediária, onde o fato de atualizar as funções de base melhorou a solução, aproximando mais da solução da malha fina, enquanto que, não atualizar as funções de base resultou numa solução com menor acurácia porém com um tempo de simulação menor que o da escala fina. No terceiro exemplo, em todas razões de engrossamento, a solução NU-ADM foi igual a da malha fina, onde o fato de atualizar as funções de base não influenciou significativamente na acurácia, mas apenas no tempo de simulação.
     
 \end{frame}
 
@@ -884,6 +1941,12 @@ Aplicando o teorema de Gauss na segunda integral de \eqref{eq:volumes_finitos.1}
 \begin{frame}[allowframebreaks]{Referências}
     \scriptsize
     \bibliography{fonts.bib}
+\end{frame}
+
+\begin{frame}
+    \centering
+    \LARGE
+    Obrigado!!!
 \end{frame}
 
 
