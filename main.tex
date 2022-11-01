@@ -49,7 +49,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%%%%
-\setbeamertemplate{caption}[numbered]
+% \setbeamertemplate{caption}[numbered]
 %%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%%%%%%%
@@ -193,7 +193,7 @@
 
 \section{Objetivos}
 
-\subsection{Geral}
+% \subsection{Geral}
 \begin{frame}{Objetivos}
 
     \begin{block}{Geral}
@@ -201,12 +201,7 @@
             \item Desenvolver uma bliblioteca na libguagem Python que realize a transferência de escala, aplicando o método ADM não uniforme (NU-ADM) em modelos que lidam com escoamento composicional.
         \end{itemize}
     \end{block}
-    
-\end{frame}
 
-\subsection{Específicos}
-\begin{frame}{Objetivos}
-    
     \begin{block}{Específicos}
         \begin{itemize}
             \item Desenvolver um interpretador os dados do reservatório
@@ -217,30 +212,43 @@
     
 \end{frame}
 
+% \subsection{Específicos}
+% \begin{frame}{Objetivos}
+    
+%     \begin{block}{Específicos}
+%         \begin{itemize}
+%             \item Desenvolver um interpretador os dados do reservatório
+%             \item Aplicar o método NU-ADM no modelo composicional IMPEC
+%             \item Comparar a solução da malha fina com a obtida por meio do método NU-ADM
+%         \end{itemize}
+%     \end{block}
+    
+% \end{frame}
+
 \section{Fundamentação Teórica}
 
 \subsection{Lei de Darcy}
-\begin{frame}{Lei de Darcy}
+% \begin{frame}{Lei de Darcy}
 
-\begin{textblock*}{.5\paperwidth}(0.2cm,2.7cm)
-    \centering
-    \includegraphics[scale=0.4]{./imgs/im1.png}
-    \footnotesize Retirado de \cite{Rosa2006}.
-\end{textblock*}
+% \begin{textblock*}{.5\paperwidth}(0.2cm,2.7cm)
+%     \centering
+%     \includegraphics[scale=0.4]{./imgs/im1.png}
+%     \footnotesize Retirado de \cite{Rosa2006}.
+% \end{textblock*}
 
-\begin{textblock*}{.48\paperwidth}(6.4cm,3cm)
-    Darcy estabeleceu que, para qualquer vazão, a velocidade do fluxo é diretamente proporcional à diferença nas alturas manométricas \cite{044441830X}.
-    \begin{equation}
-        v = \perm \dfrac{h_{1} - h_{2}}{L}
-    \end{equation}
+% \begin{textblock*}{.48\paperwidth}(6.4cm,3cm)
+%     Darcy estabeleceu que, para qualquer vazão, a velocidade do fluxo é diretamente proporcional à diferença nas alturas manométricas \cite{044441830X}.
+%     \begin{equation}
+%         v = \perm \dfrac{h_{1} - h_{2}}{L}
+%     \end{equation}
     
     
-\end{textblock*}
+% \end{textblock*}
 
-\end{frame}
+% \end{frame}
 
 \begin{frame}{Lei de Darcy}
-    Generalizando:
+    % Generalizando:
     \begin{equation}
         \velocity = -\permTensor \dfrac{1}{\mu} (\grad{p} - \grad{D})
     \end{equation}
@@ -269,40 +277,40 @@
 \end{frame}
 
 \subsection{Método dos volumes finitos}
-\begin{frame}{Método dos volumes finitos}
-\begin{figure}[!ht]
-\centering
-    \caption{Exemplos de malhas computacionais}
-    \begin{subfigure}[t]{.45\textwidth}
-        \centering
-        \includegraphics[scale=0.25]{./imgs/im3.png}
-        \caption{3D estruturada}
-        \label{fig:volumes_finitos1.a}
-    \end{subfigure}
-    \begin{subfigure}[t]{.45\textwidth}
-        \centering
-        \includegraphics[scale=0.25]{./imgs/im4.png}
-        \caption{2D estruturada}
-        \label{fig:volumes_finitos1.b}
-    \end{subfigure}
-    \\
-    \begin{subfigure}{.45\textwidth}
-        \centering
-        \includegraphics[scale=0.27]{./imgs/im6.png}
-        \caption{3D não estruturada}
-        \label{fig:volumes_finitos1.c}
-    \end{subfigure}
-    \begin{subfigure}{.45\textwidth}
-        \centering
-        \includegraphics[scale=0.27]{./imgs/im5.png}
-        \caption{2D não estruturada}
-        \label{fig:volumes_finitos1.d}
-    \end{subfigure}
+% \begin{frame}{Método dos volumes finitos}
+% \begin{figure}[!ht]
+% \centering
+%     \caption{Exemplos de malhas computacionais}
+%     \begin{subfigure}[t]{.45\textwidth}
+%         \centering
+%         \includegraphics[scale=0.25]{./imgs/im3.png}
+%         \caption{3D estruturada}
+%         \label{fig:volumes_finitos1.a}
+%     \end{subfigure}
+%     \begin{subfigure}[t]{.45\textwidth}
+%         \centering
+%         \includegraphics[scale=0.25]{./imgs/im4.png}
+%         \caption{2D estruturada}
+%         \label{fig:volumes_finitos1.b}
+%     \end{subfigure}
+%     \\
+%     \begin{subfigure}{.45\textwidth}
+%         \centering
+%         \includegraphics[scale=0.27]{./imgs/im6.png}
+%         \caption{3D não estruturada}
+%         \label{fig:volumes_finitos1.c}
+%     \end{subfigure}
+%     \begin{subfigure}{.45\textwidth}
+%         \centering
+%         \includegraphics[scale=0.27]{./imgs/im5.png}
+%         \caption{2D não estruturada}
+%         \label{fig:volumes_finitos1.d}
+%     \end{subfigure}
 
-    {\footnotesize Retirado de \cite{Knut2019}}
-\end{figure}
+%     {\footnotesize Retirado de \cite{Knut2019}}
+% \end{figure}
 
-\end{frame}
+% \end{frame}
 
 \begin{frame}{Método dos volumes finitos}
 
@@ -397,135 +405,168 @@ Aplicando o teorema da divergência de Gauss na segunda integral de \eqref{eq:vo
     
 \end{frame}
 
-\begin{frame}{Equações de estado}
+% \begin{frame}{Equações de estado}
 
-    Sabendo que $\ZfactorPhase = \dfrac{\pressure_{\phase} \molarphaseVolume}{\rConstant \temperature}$, substituindo em \eqref{eq:eos.1} e fazendo as devidas manipulações, chega-se a equação cúbica para $\ZfactorPhase$:
+%     Sabendo que $\ZfactorPhase = \dfrac{\pressure_{\phase} \molarphaseVolume}{\rConstant \temperature}$, substituindo em \eqref{eq:eos.1} e fazendo as devidas manipulações, chega-se a equação cúbica para $\ZfactorPhase$:
 
-    \begin{equation}
-        \label{eq:eos.8}
-        \ZfactorPhase^{3} - (1 - \BPhase) \ZfactorPhase^{2} + (\APhase - 2 \BPhase - 3 \BPhase^{2}) \ZfactorPhase - (\APhase \BPhase - \BPhase^{2} - \BPhase^{3}) = 0,
-    \end{equation}
+%     \begin{equation}
+%         \label{eq:eos.8}
+%         \ZfactorPhase^{3} - (1 - \BPhase) \ZfactorPhase^{2} + (\APhase - 2 \BPhase - 3 \BPhase^{2}) \ZfactorPhase - (\APhase \BPhase - \BPhase^{2} - \BPhase^{3}) = 0,
+%     \end{equation}
 
-    sendo:
+%     sendo:
 
-    \begin{equation}
-        \label{eq:eos.9}
-        \APhase = \dfrac{\aPhase \pressure_{\phase}}{\rConstant^{2} \temperature^{2}}, \hspace{1cm} \BPhase = \dfrac{\bPhase \pressure_{\phase}}{\rConstant \temperature}, 
-    \end{equation}
+%     \begin{equation}
+%         \label{eq:eos.9}
+%         \APhase = \dfrac{\aPhase \pressure_{\phase}}{\rConstant^{2} \temperature^{2}}, \hspace{1cm} \BPhase = \dfrac{\bPhase \pressure_{\phase}}{\rConstant \temperature}, 
+%     \end{equation}
 
-    e $\ZfactorPhase$ o fator de compressibilidade do fluido. O método de solução das raízes de \eqref{eq:eos.9} pode ser encontrado em \cite{Chen2007,Chen2006,Soprano_2013}.
+%     e $\ZfactorPhase$ o fator de compressibilidade do fluido. O método de solução das raízes de \eqref{eq:eos.9} pode ser encontrado em \cite{Chen2007,Chen2006,Soprano_2013}.
 
-\end{frame}
+% \end{frame}
 
-\begin{frame}{Equações de estado}
-    Fugacidade: é uma medida da quantidade que um fluido desvia-se do comportamento do gás ideal, dada por:
+% \begin{frame}{Equações de estado}
+%     Fugacidade: é uma medida da quantidade que um fluido desvia-se do comportamento do gás ideal, dada por:
 
-    \begin{equation}
-        \label{eq:eos.11}
-        \fugacity = \pressure_{\phase} \molarPartialFrac_{\component \phase} \coefFugacity_{\component \phase}, \hspace{0.7cm} \component=1,...,\numberOfComponents, \hspace{0.7cm} j = o,g ,
-    \end{equation}
+%     \begin{equation}
+%         \label{eq:eos.11}
+%         \fugacity = \pressure_{\phase} \molarPartialFrac_{\component \phase} \coefFugacity_{\component \phase}, \hspace{0.7cm} \component=1,...,\numberOfComponents, \hspace{0.7cm} j = o,g ,
+%     \end{equation}
 
-    \begin{description}[]
-        \item $\molarPartialFrac_{\component \phase}$: fração molar do componente ($\component$) na fase ($\phase$);
-        \item  $\coefFugacity_{\component \phase}$: coeficiente de fugacidade do componente $\component$ na fase $\phase$;
-        \item $\fugacity$: fugacidade do componente $\component$ na fase $\phase$;
-        \item $\numberOfComponents$: número de componentes
-    \end{description}
+%     \begin{description}[]
+%         \item $\molarPartialFrac_{\component \phase}$: fração molar do componente ($\component$) na fase ($\phase$);
+%         \item  $\coefFugacity_{\component \phase}$: coeficiente de fugacidade do componente $\component$ na fase $\phase$;
+%         \item $\fugacity$: fugacidade do componente $\component$ na fase $\phase$;
+%         \item $\numberOfComponents$: número de componentes
+%     \end{description}
     
-\end{frame}
+% \end{frame}
 
-\begin{frame}{Equações de Estado}
-    Onde $\coefFugacity_{\component \phase}$ pode ser encontrado por
+% \begin{frame}{Equações de Estado}
+%     Onde $\coefFugacity_{\component \phase}$ pode ser encontrado por
 
-    \begin{equation}
-        \small
-        \label{eq:eos.10}
-        \begin{aligned}
-            &\ln (\coefFugacity_{\componentt \phase}) = \dfrac{b_{\componentt}}{\bPhase} (\ZfactorPhase - 1) - \ln (\ZfactorPhase - \BPhase)\\
-            &- \dfrac{\APhase}{2\sqrt{2} \BPhase} \left(\dfrac{2}{\aPhase} \sum_{\componenttt}^{\numberOfComponents} \molarPartialFrac_{\componenttt \phase}(1 - \binaryInter_{\componentt \componenttt})\sqrt{a_{\componentt} a_{\componenttt}} - \dfrac{b_{\componentt}}{\bPhase} \right) \ln \left(\dfrac{\ZfactorPhase + \left[1 + \sqrt{2} \right] \BPhase}{\ZfactorPhase - \left[1 - \sqrt{2} \right] \BPhase} \right),
-        \end{aligned}
-    \end{equation}
+%     \begin{equation}
+%         \small
+%         \label{eq:eos.10}
+%         \begin{aligned}
+%             &\ln (\coefFugacity_{\componentt \phase}) = \dfrac{b_{\componentt}}{\bPhase} (\ZfactorPhase - 1) - \ln (\ZfactorPhase - \BPhase)\\
+%             &- \dfrac{\APhase}{2\sqrt{2} \BPhase} \left(\dfrac{2}{\aPhase} \sum_{\componenttt}^{\numberOfComponents} \molarPartialFrac_{\componenttt \phase}(1 - \binaryInter_{\componentt \componenttt})\sqrt{a_{\componentt} a_{\componenttt}} - \dfrac{b_{\componentt}}{\bPhase} \right) \ln \left(\dfrac{\ZfactorPhase + \left[1 + \sqrt{2} \right] \BPhase}{\ZfactorPhase - \left[1 - \sqrt{2} \right] \BPhase} \right),
+%         \end{aligned}
+%     \end{equation}
 
-    Sendo $\binaryInter_{\componentt \componenttt}$ o coeficiente de interação binária entre os componentes $\componentt$ e $\componenttt$.
+%     Sendo $\binaryInter_{\componentt \componenttt}$ o coeficiente de interação binária entre os componentes $\componentt$ e $\componenttt$.
 
-\end{frame}
+% \end{frame}
 
-\begin{frame}{Cálculo de Estabilidade e Flash}
+% \begin{frame}{Cálculo de Estabilidade e Flash}
 
-    \begin{itemize}
-        \item O objetivo do cálculo de estabilidade é verificar se, dada as propriedades do fluido, ele vai se dividir em duas fases (óleo e gás) ou vai permancer numa fase apenas;
-        \item Caso o fluido se divida em duas fases, no cálculo de flash são encontrados os valores de frações molares dos componentes em cada fase e os respectivos valores de frações molares das fases óleo é gás, utilizando o procedimento de \citeonline{Rachford_1952}.
-    \end{itemize} 
+%     \begin{itemize}
+%         \item O objetivo do cálculo de estabilidade é verificar se, dada as propriedades do fluido, ele vai se dividir em duas fases (óleo e gás) ou vai permancer numa fase apenas;
+%         \item Caso o fluido se divida em duas fases, no cálculo de flash são encontrados os valores de frações molares dos componentes em cada fase e os respectivos valores de frações molares das fases óleo é gás, utilizando o procedimento de \citeonline{Rachford_1952}.
+%     \end{itemize} 
     
-\end{frame}
+% \end{frame}
 
-\begin{frame}{Equação da pressão}
-    Equação do balanço molar \cite{Fernandes_2014}:
+% \begin{frame}{Equação da pressão}
+%     Equação do balanço molar \cite{Fernandes_2014}:
 
-    \begin{equation}
-        \label{eq:modelo_mat.1}
-        \dfrac{1}{\bulkVolume} \pd{\molNumber_{\component}}{t} = \sum_{\phase}^{\numberOfPhases} \div{\left(\molarPartialFrac_{\component \phase} \molarDensityPhase \velocity_{\phase} \right)} + \dfrac{\mSourceTerm_{\component}}{\bulkVolume} ,
-    \end{equation}
+%     \begin{equation}
+%         \label{eq:modelo_mat.1}
+%         \dfrac{1}{\bulkVolume} \pd{\molNumber_{\component}}{t} = \sum_{\phase}^{\numberOfPhases} \div{\left(\molarPartialFrac_{\component \phase} \molarDensityPhase \velocity_{\phase} \right)} + \dfrac{\mSourceTerm_{\component}}{\bulkVolume} ,
+%     \end{equation}
 
-    \begin{description}[]
-        \item $\molNumber_{\component}$ = número de mols do componente $\component$;
-        \item $\molarDensityPhase \left[ \dfrac{mol}{\m3} \right]$ = densidade molar da fase $\phase$;
-        \item $\mSourceTerm_{\component} \left[ \dfrac{mol}{s} \right]$ = termo fonte do componente $\component$;
-        \item $\numberOfPhases$ = número de fases;
-        \item $\bulkVolume$ = Volume total
-    \end{description}
-\end{frame}
+%     \begin{description}[]
+%         \item $\molNumber_{\component}$ = número de mols do componente $\component$;
+%         \item $\molarDensityPhase \left[ \dfrac{mol}{\m3} \right]$ = densidade molar da fase $\phase$;
+%         \item $\mSourceTerm_{\component} \left[ \dfrac{mol}{s} \right]$ = termo fonte do componente $\component$;
+%         \item $\numberOfPhases$ = número de fases;
+%         \item $\bulkVolume$ = Volume total
+%     \end{description}
+% \end{frame}
 
-\begin{frame}{Equação da pressão}
-    A equação da pressão é obtida igualando o volume poroso ao volume do fluido
-    \cite{Acs_1985}:
+% \begin{frame}{Equação da pressão}
+%     A equação da pressão é obtida igualando o volume poroso ao volume do fluido
+%     \cite{Acs_1985}:
 
-    \begin{equation}
-        \label{eq:modelo_mat.2}
-        \poroVolume (\pressure) = \totalFluidVolume (\pressure, \molNumber_{1}, \molNumber_{2}, ..., \molNumber_{\numberOfComponents + 1}),
-    \end{equation}
+%     \begin{equation}
+%         \label{eq:modelo_mat.2}
+%         \poroVolume (\pressure) = \totalFluidVolume (\pressure, \molNumber_{1}, \molNumber_{2}, ..., \molNumber_{\numberOfComponents + 1}),
+%     \end{equation}
 
-    \begin{description}[]
-        \item $\poroVolume$ = volume poroso = $\porosidade \bulkVolume$;
-        \item $\porosidade$ = porosidade = $\porosidadeIni \left[1 + \rockCompress (\pressure - \pressureIni) \right]$;
-        \item $\totalFluidVolume$ = volume total do fluido 
-        \item $\rockCompress$ = compressibilidade da rocha;
-        \item $\porosidadeIni$ = porosidade na pressão de referência $\pressureIni$
-    \end{description}
+%     \begin{description}[]
+%         \item $\poroVolume$ = volume poroso = $\porosidade \bulkVolume$;
+%         \item $\porosidade$ = porosidade = $\porosidadeIni \left[1 + \rockCompress (\pressure - \pressureIni) \right]$;
+%         \item $\totalFluidVolume$ = volume total do fluido 
+%         \item $\rockCompress$ = compressibilidade da rocha;
+%         \item $\porosidadeIni$ = porosidade na pressão de referência $\pressureIni$
+%     \end{description}
     
-\end{frame}
+% \end{frame}
 
-\begin{frame}{Equação da pressão}
-    Derivando \eqref{eq:modelo_mat.2} com relação ao tempo:
+% \begin{frame}{Equação da pressão}
+%     Derivando \eqref{eq:modelo_mat.2} com relação ao tempo:
 
-    \begin{equation}
-        \label{eq:modelo_mat.2.1}
-        \pd{\poroVolume}{\pressure} \pd{\pressure}{\timme} = \pd{\totalFluidVolume}{\pressure} \pd{\pressure}{\timme} + \sum_{\component}^{\numberOfComponents + 1} \left( \pd{\totalFluidVolume}{\molNumber_{\component}}  \right)_{\pressure} \pd{\molNumber_{\component}}{\timme}.
-    \end{equation}
+%     \begin{equation}
+%         \label{eq:modelo_mat.2.1}
+%         \pd{\poroVolume}{\pressure} \pd{\pressure}{\timme} = \pd{\totalFluidVolume}{\pressure} \pd{\pressure}{\timme} + \sum_{\component}^{\numberOfComponents + 1} \left( \pd{\totalFluidVolume}{\molNumber_{\component}}  \right)_{\pressure} \pd{\molNumber_{\component}}{\timme}.
+%     \end{equation}
 
-    Derivando o volume poroso em relação a pressão:
+%     Derivando o volume poroso em relação a pressão:
 
-    \begin{equation}
-        \label{eq:modelo_mat.5}
-        \pd{\poroVolume}{\pressure} = \bulkVolume \porosidadeIni \rockCompress .
-    \end{equation}
+%     \begin{equation}
+%         \label{eq:modelo_mat.5}
+%         \pd{\poroVolume}{\pressure} = \bulkVolume \porosidadeIni \rockCompress .
+%     \end{equation}
     
-\end{frame}
+% \end{frame}
 
-\begin{frame}{Equação da pressão}
-    Substituindo \eqref{eq:modelo_mat.5} em \eqref{eq:modelo_mat.2} temos:
+% \begin{frame}{Equação da pressão}
+%     Substituindo \eqref{eq:modelo_mat.5} em \eqref{eq:modelo_mat.2} temos:
 
-    \begin{equation}
-        \label{eq:modelo_mat.6}
-        \bulkVolume \porosidadeIni \rockCompress \pd{\pressure}{\timme} = \pd{\totalFluidVolume}{\pressure} \pd{\pressure}{\timme} + \sum_{\component}^{\numberOfComponents + 1} \left( \pd{\totalFluidVolume}{\molNumber_{\component}}  \right)_{\pressure} \pd{\molNumber_{\component}}{\timme},
-    \end{equation}
+%     \begin{equation}
+%         \label{eq:modelo_mat.6}
+%         \bulkVolume \porosidadeIni \rockCompress \pd{\pressure}{\timme} = \pd{\totalFluidVolume}{\pressure} \pd{\pressure}{\timme} + \sum_{\component}^{\numberOfComponents + 1} \left( \pd{\totalFluidVolume}{\molNumber_{\component}}  \right)_{\pressure} \pd{\molNumber_{\component}}{\timme},
+%     \end{equation}
 
-    Substituindo $\pd{\molNumber_{\component}}{\timme}$ de \eqref{eq:modelo_mat.6} em  \eqref{eq:modelo_mat.1} temos a equação da pressão:
+%     Substituindo $\pd{\molNumber_{\component}}{\timme}$ de \eqref{eq:modelo_mat.6} em  \eqref{eq:modelo_mat.1} temos a equação da pressão:
+
+%     \begin{equation}
+%         \label{eq:modelo_mat.7}
+%         \left( \porosidadeIni \rockCompress - \dfrac{1}{\bulkVolume} \pd{\totalFluidVolume}{\pressure} \right) \pd{\pressure}{\timme} = \sum_{\component}^{\numberOfComponents + 1} \left( \pd{\totalFluidVolume}{\molNumber_{\component}}  \right)_{\pressure} \left[ \sum_{\phase}^{\numberOfPhases} \div{\left(\molarPartialFrac_{\component \phase} \molarDensityPhase \velocity_{\phase} \right)} + \dfrac{\mSourceTerm_{\component}}{\bulkVolume}\right], 
+%     \end{equation}
+    
+% \end{frame}
+
+\begin{frame}{Equação da Pressão}
 
     \begin{equation}
         \label{eq:modelo_mat.7}
         \left( \porosidadeIni \rockCompress - \dfrac{1}{\bulkVolume} \pd{\totalFluidVolume}{\pressure} \right) \pd{\pressure}{\timme} = \sum_{\component}^{\numberOfComponents + 1} \left( \pd{\totalFluidVolume}{\molNumber_{\component}}  \right)_{\pressure} \left[ \sum_{\phase}^{\numberOfPhases} \div{\left(\molarPartialFrac_{\component \phase} \molarDensityPhase \velocity_{\phase} \right)} + \dfrac{\mSourceTerm_{\component}}{\bulkVolume}\right], 
     \end{equation}
+
+    \begin{columns}
+        \footnotesize
+        \begin{column}{0.5\textwidth}
+            \begin{description}
+                \item $\porosidadeIni$: Porosidade na pressão de referência;
+                \item $\rockCompress$: Compressibilidade da rocha;
+                \item $\bulkVolume$: Volume total;
+                \item $\totalFluidVolume$: Volume do fluido;
+                \item $\pressure$: Pressão; 
+            \end{description}
+        \end{column}
+        \begin{column}{0.5\textwidth}
+            \begin{description}
+                \item $t$: Tempo;
+                \item $\molNumber$: número de mols;
+                \item $\molarPartialFrac$: Fração molar do componente $\component$ na fase $\phase$;
+                \item $\molarDensity$: densidade molar;
+                \item $\mSourceTerm$: Termo fonte 
+            \end{description}
+            
+        \end{column}
+    \end{columns}
+
     
 \end{frame}
 
@@ -542,6 +583,11 @@ Aplicando o teorema da divergência de Gauss na segunda integral de \eqref{eq:vo
         \label{eq:modelo_mat.8}
         f_{\component o} = f_{\component g},
     \end{equation}
+
+    \begin{description}
+        \item $\Saturation$: Saturação;
+        \item $f$: Fugacidade.
+    \end{description}
     
 \end{frame}
 
@@ -563,35 +609,44 @@ Aplicando o teorema da divergência de Gauss na segunda integral de \eqref{eq:vo
 
 \subsection{Métodos de Transferência de escala}
 \begin{frame}{Transferência de escala}
-    \begin{figure}[!ht]
-        \begin{subfigure}{0.4\textwidth}
+
+    \begin{columns}
+        \begin{column}{0.5\textwidth}
             \centering
             \resizebox*{5cm}{!}{
             \input{./imgs/upscaling.tex}}
-            \subcaption{\textit{Upscaling}}
-            \label{fig:multiescala.1.b}
-        \end{subfigure}
-        \begin{subfigure}{0.55\textwidth}
-            \centering
+
+            \textit{\small Upscaling}
+
+            \vspace{0.3cm}
+
             \resizebox*{6.5cm}{!}{
             \input{./imgs/multiescala_classico.tex}}
-            \subcaption{Multiescala}
-            \label{fig:multiescala.1.a}
-        \end{subfigure}
-        % \label{fig:multiescala.1}
-    \end{figure}
+
+            {\small Multiescala}
+        \end{column}
+        
+        \begin{column}{0.5\textwidth}
+            \centering
+            \resizebox*{6cm}{!}{
+            \input{./imgs/multilevel_img.tex}}
+
+            {\small ADM}
+        \end{column}
+    \end{columns}
+    
 \end{frame}
 
-\begin{frame}{Transferência de escala}
-    \begin{figure}[!ht]
-        \centering
-        \resizebox*{7cm}{!}{
-        \input{./imgs/multilevel_img.tex}}
+% \begin{frame}{Transferência de escala}
+%     \begin{figure}[!ht]
+%         \centering
+%         \resizebox*{7cm}{!}{
+%         \input{./imgs/multilevel_img.tex}}
         
-        {\footnotesize Método ADM} 
-        \label{fig:multinivel.1}
-    \end{figure}
-\end{frame}
+%         {\footnotesize Método ADM} 
+%         \label{fig:multinivel.1}
+%     \end{figure}
+% \end{frame}
 
 \begin{frame}{Método Multiescala}
     \begin{figure}[!ht]
@@ -652,16 +707,16 @@ Aplicando o teorema da divergência de Gauss na segunda integral de \eqref{eq:vo
     onde $\boundaryVolDual$ é o contorno do volume dual $\volDual$, $\parallel$ indica a componente tangencial do fluxo em $\partial \volDual$, $x^{k}$ é o volume que é vértice da malha grossa dual e $\kroneckerDelta_{Ik}$ é o delta de Kronecker aplicado em $x^{k}$. Nesse trabalho foram adotadas as condições de contorno reduzidas \cite{Arthur_diss,Mazlumi_2021}.
 \end{frame}
 
-\begin{frame}{Método Multiescala}
-    \begin{figure}[!ht]
-        \caption{Valores das funções de base para o vértice $x_{1}$}
-        \centering
-        \includegraphics[scale=0.4]{./imgs/op_example.png}    
-        \label{fig:operador_method.1}
+% \begin{frame}{Método Multiescala}
+%     \begin{figure}[!ht]
+%         \caption{Valores das funções de base para o vértice $x_{1}$}
+%         \centering
+%         \includegraphics[scale=0.4]{./imgs/op_example.png}    
+%         \label{fig:operador_method.1}
 
-        {\footnotesize Fonte: \cite{Hajibeygi_2020}}
-    \end{figure}
-\end{frame}
+%         {\footnotesize Fonte: \cite{Hajibeygi_2020}}
+%     \end{figure}
+% \end{frame}
 
 \begin{frame}{Método Multiescala}
     O operador de restrição utilizado nesse trabalho, que é responsável por realizar o \textit{Upscaling} das informações, é o operador clássico de volumes finitos, dado por \cite{Tene_2016}:
@@ -745,7 +800,7 @@ Aplicando o teorema da divergência de Gauss na segunda integral de \eqref{eq:vo
         \label{eq:multinivel.1}
     (\prolOperatorAdm)^{l}_{l-1} (i,j) =
         \begin{cases}
-            (\prolOperator)^{l}_{l-1} (i,j) \text{ se a célula } i \in \Gamma^{l-1} \text{ e a célula } j \in \hat{\Pi}^{l}\\
+            (\prolOperator)^{l}_{l-1} (i,j) \text{ se o volume pertence ao próximo nível}\\
             \delta_{ij} \text{ caso contrário},\\
         \end{cases}
     \end{equation}
@@ -754,55 +809,55 @@ Aplicando o teorema da divergência de Gauss na segunda integral de \eqref{eq:vo
         \label{eq:multinivel.2}
     (\restOperatorAdm)^{l-1}_{l} (i,j) =
         \begin{cases}
-            (\restOperator)^{l-1}_{l} (i,j) \text{ se a célula } i \in \Gamma^{l} \text{ e a célula } j \in \Gamma^{l-1}\\
+            (\restOperator)^{l-1}_{l} (i,j) \text{ se o volume foi pertence ao próximo nível}\\
             \delta_{ij} \text{ caso contrário}.\\
         \end{cases}
     \end{equation}
 
 \end{frame}
 
-\begin{frame}{Método ADM}
-    \begin{figure}
-        \caption{Representação dos conjuntos $\Omega^{l}$, $\Pi^{l}$ e $\Gamma^{l}$}
-        \begin{subfigure}{.3\textwidth}
-            \centering
-            \resizebox*{3cm}{!}{
-            \input{./imgs/adm2.tex}}
-            \subcaption{$\Omega^{l}$}
-            \label{fig:multinivel.2.a}
-        \end{subfigure}
-        \begin{subfigure}{.3\textwidth}
-            \centering
-            \resizebox*{3cm}{!}{
-            \input{./imgs/adm1.tex}}
-            \subcaption{$\Pi^{l}$}
-            \label{fig:multinivel.2.b}
-        \end{subfigure}
-        \begin{subfigure}{.3\textwidth}
-            \centering
-            \resizebox*{3cm}{!}{
-            \input{./imgs/adm3.tex}}
-            \subcaption{$\Gamma^{l}$}
-            \label{fig:multinivel.2.c}
-        \end{subfigure}
-        \label{fig:multinivel.2}
-    \end{figure}
+% \begin{frame}{Método ADM}
+%     \begin{figure}
+%         \caption{Representação dos conjuntos $\Omega^{l}$, $\Pi^{l}$ e $\Gamma^{l}$}
+%         \begin{subfigure}{.3\textwidth}
+%             \centering
+%             \resizebox*{3cm}{!}{
+%             \input{./imgs/adm2.tex}}
+%             \subcaption{$\Omega^{l}$}
+%             \label{fig:multinivel.2.a}
+%         \end{subfigure}
+%         \begin{subfigure}{.3\textwidth}
+%             \centering
+%             \resizebox*{3cm}{!}{
+%             \input{./imgs/adm1.tex}}
+%             \subcaption{$\Pi^{l}$}
+%             \label{fig:multinivel.2.b}
+%         \end{subfigure}
+%         \begin{subfigure}{.3\textwidth}
+%             \centering
+%             \resizebox*{3cm}{!}{
+%             \input{./imgs/adm3.tex}}
+%             \subcaption{$\Gamma^{l}$}
+%             \label{fig:multinivel.2.c}
+%         \end{subfigure}
+%         \label{fig:multinivel.2}
+%     \end{figure}
 
-    \begin{equation}
-        \label{eq:multinivel.3}
-        ( \restOperatorAdm )^{l-1}_{l} ... ( \restOperatorAdm )^{0}_{1} \fineTransmissibility (\prolOperatorAdm)^{l}_{l-1} ... (\prolOperatorAdm)^{1}_{0} \vectorPressureAdm = ( \restOperatorAdm )^{l-1}_{l} ... ( \restOperatorAdm )^{0}_{1} \vectorfineSource,
-    \end{equation}
-\end{frame}
+%     \begin{equation}
+%         \label{eq:multinivel.3}
+%         ( \restOperatorAdm )^{l-1}_{l} ... ( \restOperatorAdm )^{0}_{1} \fineTransmissibility (\prolOperatorAdm)^{l}_{l-1} ... (\prolOperatorAdm)^{1}_{0} \vectorPressureAdm = ( \restOperatorAdm )^{l-1}_{l} ... ( \restOperatorAdm )^{0}_{1} \vectorfineSource,
+%     \end{equation}
+% \end{frame}
+
+% \begin{frame}{Método NU-ADM}
+%     A fim de diminuir a quantidade de volumes na malha ADM, foi desenvolvido por \citeonline{Araujo_dos_Santos_2022} o método ADM não uniforme (NU-ADM), permitindo que os volumes não engrossados não estejam necessariamente agrupados de acordo com o volume da malha grossa, reduzindo o sistema linear da escala ADM.
+
+
+% \end{frame}
 
 \begin{frame}{Método NU-ADM}
-    A fim de diminuir a quantidade de volumes na malha ADM, foi desenvolvido por \citeonline{Araujo_dos_Santos_2022} o método ADM não uniforme (NU-ADM), permitindo que os volumes não engrossados não estejam necessariamente agrupados de acordo com o volume da malha grossa, reduzindo o sistema linear da escala ADM.
-
-
-\end{frame}
-
-\begin{frame}{Método NU-ADM}
     \begin{figure}
-        \caption{Diferença entre os métodos ADM e NU-ADM}
+        % \caption{Diferença entre os métodos ADM e NU-ADM}
         \begin{subfigure}{.48\textwidth}
             \centering
             \resizebox*{5cm}{!}{
@@ -866,7 +921,9 @@ Aplicando o teorema da divergência de Gauss na segunda integral de \eqref{eq:vo
 \end{frame}
 
 \begin{frame}{Atualização das funções de base}
-    As funções de base são atualizadas segundo \citeonline{Zhou2010}, utilizando um valor determinado pelo usuário ($\epsilon$) para verificar a variação da mobilidade de cada fase entre dois passos de tempo consecutivos ($n-1$ e $n$), conforme a seguinte equação:
+    As funções de base são atualizadas segundo \citeonline{Zhou2010}: 
+    
+    % utilizando um valor determinado pelo usuário ($\epsilon$) para verificar a variação da mobilidade de cada fase entre dois passos de tempo consecutivos ($n-1$ e $n$), conforme a seguinte equação:
 
 \begin{equation}
     \dfrac{1}{1+\epsilon} < \dfrac{\mobility_{\phase}^{n}}{\mobility_{\phase}^{n-1}}  < 1 + \epsilon  
@@ -1017,7 +1074,10 @@ Aplicando o teorema da divergência de Gauss na segunda integral de \eqref{eq:vo
 \end{frame}
 % \setcounter{table}{2}
 \begin{frame}{Problema \theproblem}
-    \small
+
+    \begin{columns}
+        \begin{column}{0.5\textwidth}
+            \small
     \begin{table}[!ht]
         \centering
         \begin{subtable}{\textwidth}
@@ -1035,21 +1095,35 @@ Aplicando o teorema da divergência de Gauss na segunda integral de \eqref{eq:vo
                 $\criticalV [\nicefrac{m^{3}}{mol} \times 10^{-4}]$ & $6,03$\\
                 \hline            
             \end{tabular}
-            \caption{Dados do componente hidrocarboneto}
+
+            \vspace{0.3cm}
+
+            {\small Dados do componente hidrocarboneto}
             \label{tab:table_prob4.c}
         \end{subtable}
     \end{table}
+        \end{column}
+        \begin{column}{0.5\textwidth}
+            \includegraphics[scale=0.25]{./imgs/prescricao.png}
+
+            {\small \hspace{0.5cm}Localização das prescrições}
+        \end{column}
+    \end{columns}
+
+    
 \end{frame}
 
 \newcommand{\FrameProblemName}{Problema \theproblem}
-\begin{frame}{\FrameProblemName}
-    \begin{figure}
-        \centering
-        \caption{Localização das prescrições}
-        \includegraphics[scale=0.25]{./imgs/prescricao.png}
-        \label{fig:fig3_pr4}
-    \end{figure}
-\end{frame}
+% \begin{frame}{\FrameProblemName}
+%     \begin{figure}
+%         \centering
+%         % \caption{Localização das prescrições}
+%         \includegraphics[scale=0.25]{./imgs/prescricao.png}
+
+%         {\small Localização das perscrições}
+%         \label{fig:fig3_pr4}
+%     \end{figure}
+% \end{frame}
 
 \begin{frame}{\FrameProblemName}
     \begin{figure}
@@ -1069,166 +1143,145 @@ Aplicando o teorema da divergência de Gauss na segunda integral de \eqref{eq:vo
     \end{figure}
 \end{frame}
 
-\begin{frame}{\FrameProblemName}
+\begin{frame}{\FrameProblemName: {\small Tempos de simulação}}
     \begin{figure}[!htbp]
         \centering
-        \caption{Tempos de simulação}
+        % \caption{Tempos de simulação}
         \begin{subfigure}{.48\textwidth}
             \centering
-            \includegraphics[scale=0.4]{./imgs/pr4/tempo_sim_cr7.png}
+            \includegraphics[height=2.5cm]{./imgs/pr4/tempo_sim_cr7.png}
             \caption{Tempo de simulação Cr=7.}
         \end{subfigure}
         \hfill
         \begin{subfigure}{.48\textwidth}
             \centering
-            \includegraphics[scale=0.4]{./imgs/pr4/total_time_cr7.png}
+            \includegraphics[height=2.5cm]{./imgs/pr4/total_time_cr7.png}
             \caption{Tempo total de simulação Cr=7.}
         \end{subfigure}
-        % \bigskip
-        % \begin{subfigure}{.48\textwidth}
-        %     \centering
-        %     \includegraphics[scale=0.55]{./imgs/pr4/tempo_sim_cr5.png}
-        %     \caption{Tempo de simulação Cr=5.}
-        % \end{subfigure}
-        % \hfill
-        % \begin{subfigure}{.48\textwidth}
-        %     \centering
-        %     \includegraphics[scale=0.57]{./imgs/pr4/total_time_cr5.png}
-        %     \caption{Tempo total de simulação Cr=5.}
-        % \end{subfigure}
-        \label{fig:fig4_pr4}
-    \end{figure}
-\end{frame}
-
-\begin{frame}{\FrameProblemName}
-    \begin{figure}[!htbp]
-        \centering
-        \caption{Tempos de simulação}
-        % \begin{subfigure}{.48\textwidth}
-        %     \centering
-        %     \includegraphics[scale=0.4]{./imgs/pr4/tempo_sim_cr7.png}
-        %     \caption{Tempo de simulação Cr=7.}
-        % \end{subfigure}
-        % \hfill
-        % \begin{subfigure}{.48\textwidth}
-        %     \centering
-        %     \includegraphics[scale=0.4]{./imgs/pr4/total_time_cr7.png}
-        %     \caption{Tempo total de simulação Cr=7.}
-        % \end{subfigure}
-        % \bigskip
+        \bigskip
         \begin{subfigure}{.48\textwidth}
             \centering
-            \includegraphics[scale=0.4]{./imgs/pr4/tempo_sim_cr5.png}
+            \includegraphics[height=2.5cm]{./imgs/pr4/tempo_sim_cr5.png}
             \caption{Tempo de simulação Cr=5.}
         \end{subfigure}
         \hfill
         \begin{subfigure}{.48\textwidth}
             \centering
-            \includegraphics[scale=0.4]{./imgs/pr4/total_time_cr5.png}
+            \includegraphics[height=2.5cm]{./imgs/pr4/total_time_cr5.png}
             \caption{Tempo total de simulação Cr=5.}
         \end{subfigure}
-        \label{fig:fig4.2_pr4}
+        \label{fig:fig4_pr4}
     \end{figure}
 \end{frame}
+
+% \begin{frame}{\FrameProblemName}
+%     \begin{figure}[!htbp]
+%         \centering
+%         \caption{Tempos de simulação}
+%         % \begin{subfigure}{.48\textwidth}
+%         %     \centering
+%         %     \includegraphics[scale=0.4]{./imgs/pr4/tempo_sim_cr7.png}
+%         %     \caption{Tempo de simulação Cr=7.}
+%         % \end{subfigure}
+%         % \hfill
+%         % \begin{subfigure}{.48\textwidth}
+%         %     \centering
+%         %     \includegraphics[scale=0.4]{./imgs/pr4/total_time_cr7.png}
+%         %     \caption{Tempo total de simulação Cr=7.}
+%         % \end{subfigure}
+%         % \bigskip
+%         \begin{subfigure}{.48\textwidth}
+%             \centering
+%             \includegraphics[scale=0.4]{./imgs/pr4/tempo_sim_cr5.png}
+%             \caption{Tempo de simulação Cr=5.}
+%         \end{subfigure}
+%         \hfill
+%         \begin{subfigure}{.48\textwidth}
+%             \centering
+%             \includegraphics[scale=0.4]{./imgs/pr4/total_time_cr5.png}
+%             \caption{Tempo total de simulação Cr=5.}
+%         \end{subfigure}
+%         \label{fig:fig4.2_pr4}
+%     \end{figure}
+% \end{frame}
 
 \begin{frame}{\FrameProblemName}
     \begin{figure}[!htbp]
         \centering
-        \caption{Curvas de produção.}
+        % \caption{Curvas de produção.}
         \begin{subfigure}{.48\textwidth}
             \centering
-            \includegraphics[scale=0.4]{./imgs/pr4/oil_prod_cr7.png}
-            \caption{Cr=7.}
+            \includegraphics[height=2.5cm]{./imgs/pr4/oil_prod_cr7.png}
+            \caption{Curva de produção Cr=7.}
         \end{subfigure}
         \hfill
         \begin{subfigure}{.48\textwidth}
             \centering
-            \includegraphics[scale=0.4]{./imgs/pr4/oil_prod_cr5.png}
-            \caption{Cr=5.}
+            \includegraphics[height=2.5cm]{./imgs/pr4/oil_prod_cr5.png}
+            \caption{Curva de produção Cr=5.}
+        \end{subfigure}
+        \bigskip
+        \begin{subfigure}{.48\textwidth}
+            \centering
+            \includegraphics[height=2.5cm]{./imgs/pr4/active_vols_cr7.png}
+            \caption{Volumes ativos Cr=7.}
+        \end{subfigure}
+        \hfill
+        \begin{subfigure}{.48\textwidth}
+            \centering
+            \includegraphics[height=2.5cm]{./imgs/pr4/active_vols_cr5.png}
+            \caption{Volumes ativos Cr=5.}
         \end{subfigure}
         \label{fig:fig5_pr4}
     \end{figure}
 \end{frame}
 
-\begin{frame}{\FrameProblemName}
-    \begin{figure}[!htbp]
-        \centering
-        \caption{Volumes Ativos.}
-        \begin{subfigure}{.48\textwidth}
-            \centering
-            \includegraphics[scale=0.4]{./imgs/pr4/active_vols_cr7.png}
-            \caption{Cr=7.}
-        \end{subfigure}
-        \hfill
-        \begin{subfigure}{.48\textwidth}
-            \centering
-            \includegraphics[scale=0.4]{./imgs/pr4/active_vols_cr5.png}
-            \caption{Cr=5.}
-        \end{subfigure}
+% \begin{frame}{\FrameProblemName}
+%     \begin{figure}[!htbp]
+%         \centering
+%         \caption{Volumes Ativos.}
+%         \begin{subfigure}{.48\textwidth}
+%             \centering
+%             \includegraphics[scale=0.4]{./imgs/pr4/active_vols_cr7.png}
+%             \caption{Cr=7.}
+%         \end{subfigure}
+%         \hfill
+%         \begin{subfigure}{.48\textwidth}
+%             \centering
+%             \includegraphics[scale=0.4]{./imgs/pr4/active_vols_cr5.png}
+%             \caption{Cr=5.}
+%         \end{subfigure}
     
-        % \legend{Fonte: Elaborado pelo autor.}
-        \label{fig:fig6_pr4}
-    \end{figure}
-\end{frame}
+%         % \legend{Fonte: Elaborado pelo autor.}
+%         \label{fig:fig6_pr4}
+%     \end{figure}
+% \end{frame}
 
-\begin{frame}{\FrameProblemName}
+\begin{frame}{\FrameProblemName: {\small Malha NU-ADM}}
     \begin{figure}[!htbp]
         \centering
-        \caption{Malha NU-ADM}
+        % \caption{Malha NU-ADM}
         \begin{subfigure}{.48\textwidth}
             \centering
-            \includegraphics[height=4.6cm]{./imgs/pr4/sat_cr7.png}
+            \includegraphics[height=2.5cm]{./imgs/pr4/sat_cr7.png}
             \caption{Saturação de água Cr=7. Vermelho = 0,65, Azul = 0,2}
         \end{subfigure}
         \hfill
         \begin{subfigure}{.48\textwidth}
             \centering
-            \includegraphics[height=4.7cm]{./imgs/pr4/nivel_cr7.png}
+            \includegraphics[height=2.5cm]{./imgs/pr4/nivel_cr7.png}
             \caption{Nível Cr=7. Azul=0, Vermelho=1}
         \end{subfigure}
-        % \bigskip
-        % \begin{subfigure}{.48\textwidth}
-        %     \centering
-        %     \includegraphics[scale=0.4]{./imgs/pr4/sat_cr5.png}
-        %     \caption{Saturação de água Cr=5. Vermelho = 0,65, Azul = 0,2}
-        % \end{subfigure}
-        % \hfill
-        % \begin{subfigure}{.48\textwidth}
-        %     \centering
-        %     \includegraphics[scale=0.41]{./imgs/pr4/nivel_cr5.png}
-        %     \caption{Nível Cr=5. Azul=0, Vermelho=1}
-        % \end{subfigure}
-    
-        % \legend{Fonte: Elaborado pelo autor.}
-        \label{fig:fig7_pr4}
-    \end{figure}
-\end{frame}
-
-\begin{frame}{\FrameProblemName}
-    \begin{figure}[!htbp]
-        \centering
-        \caption{Malha NU-ADM}
-        % \begin{subfigure}{.48\textwidth}
-        %     \centering
-        %     \includegraphics[height=4.6cm]{./imgs/pr4/sat_cr7.png}
-        %     \caption{Saturação de água Cr=7. Vermelho = 0,65, Azul = 0,2}
-        % \end{subfigure}
-        % \hfill
-        % \begin{subfigure}{.48\textwidth}
-        %     \centering
-        %     \includegraphics[height=4.7cm]{./imgs/pr4/nivel_cr7.png}
-        %     \caption{Nível Cr=7. Azul=0, Vermelho=1}
-        % \end{subfigure}
-        % \bigskip
+        \bigskip
         \begin{subfigure}{.48\textwidth}
             \centering
-            \includegraphics[height=4.6cm]{./imgs/pr4/sat_cr5.png}
+            \includegraphics[height=2.5cm]{./imgs/pr4/sat_cr5.png}
             \caption{Saturação de água Cr=5. Vermelho = 0,65, Azul = 0,2}
         \end{subfigure}
         \hfill
         \begin{subfigure}{.48\textwidth}
             \centering
-            \includegraphics[height=4.7cm]{./imgs/pr4/nivel_cr5.png}
+            \includegraphics[height=2.5cm]{./imgs/pr4/nivel_cr5.png}
             \caption{Nível Cr=5. Azul=0, Vermelho=1}
         \end{subfigure}
     
@@ -1236,6 +1289,39 @@ Aplicando o teorema da divergência de Gauss na segunda integral de \eqref{eq:vo
         \label{fig:fig7_pr4}
     \end{figure}
 \end{frame}
+
+% \begin{frame}{\FrameProblemName}
+%     \begin{figure}[!htbp]
+%         \centering
+%         \caption{Malha NU-ADM}
+%         % \begin{subfigure}{.48\textwidth}
+%         %     \centering
+%         %     \includegraphics[height=4.6cm]{./imgs/pr4/sat_cr7.png}
+%         %     \caption{Saturação de água Cr=7. Vermelho = 0,65, Azul = 0,2}
+%         % \end{subfigure}
+%         % \hfill
+%         % \begin{subfigure}{.48\textwidth}
+%         %     \centering
+%         %     \includegraphics[height=4.7cm]{./imgs/pr4/nivel_cr7.png}
+%         %     \caption{Nível Cr=7. Azul=0, Vermelho=1}
+%         % \end{subfigure}
+%         % \bigskip
+%         \begin{subfigure}{.48\textwidth}
+%             \centering
+%             \includegraphics[height=4.6cm]{./imgs/pr4/sat_cr5.png}
+%             \caption{Saturação de água Cr=5. Vermelho = 0,65, Azul = 0,2}
+%         \end{subfigure}
+%         \hfill
+%         \begin{subfigure}{.48\textwidth}
+%             \centering
+%             \includegraphics[height=4.7cm]{./imgs/pr4/nivel_cr5.png}
+%             \caption{Nível Cr=5. Azul=0, Vermelho=1}
+%         \end{subfigure}
+    
+%         % \legend{Fonte: Elaborado pelo autor.}
+%         \label{fig:fig7_pr4}
+%     \end{figure}
+% \end{frame}
 
 \refstepcounter{problem}
 \subsection{Problema \theproblem}
