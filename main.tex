@@ -1,4 +1,5 @@
 % \documentclass{article}
+% \documentclass[professionalfont,notes]{beamer}
 \documentclass[professionalfont]{beamer}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -21,6 +22,7 @@
 \usepackage{array}
 \usepackage{tikz-3dplot}
 \usepackage{tikz-dimline}
+\usepackage{ragged2e}
 \usepackage[absolute,overlay]{textpos} % para usar textblock
 \usepackage{tcolorbox}
 \usepackage[absolute,overlay]{textpos}
@@ -50,6 +52,8 @@
 
 %%%%%%%%%%%%%%%%%%
 % \setbeamertemplate{caption}[numbered]
+% \setbeamertemplate{note page}[plain]
+\setbeamertemplate{note page}[lookahead]
 %%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%%%%%%%
@@ -183,11 +187,15 @@
 \frametitle{Introdução}
 \index{Introdução}
 \begin{itemize}
-    \item Importância da simulação computacional
-    \item Importância da utilização de modelos composicionais
-    \item Problema do tempo de simulação
-    \item Métodos de Transferência de escala: \textit{Upscaling}, Multiescala, ADM (\textit{Algebraic Dynamic Multilevel Method})
-    \item Método NU-ADM (\textit{Non Uniform Algebraic Dynamic Multilevel Method})
+    \item<1-> Importância da simulação computacional \note[item]{\scriptsize  a exploração de petróleo e gás é uma atividade que envolve a captação
+    de grandes investimentos com altos riscos financeiros, por isso é essencial poder predizer o
+    comportamento de um campo ou reservatório, por meio da simulação numérica. Um simulador numérico permite obter informações sobre o desempenho de um campo ou reservatório submetidos a vários cenários de produção, possibilitando encontrar  condições ótimas para se extrair petróleo desse campo}
+    \item<2-> Importância da utilização de modelos composicionais \note[item]{
+        \scriptsize Pode-se dizer que a recuperação de hidrocarbonetos em meios porosos ocorre em 3 fases: recuperação primária, secundária e terciária. Na recuperação primária, o reservatório tem a energia necessária para impulsionar o fluido para a superfície naturalmente. Na recuperação
+    secundária, quando a pressão no reservatório não é suficiente para manter a produção, se faz necessário injetar outro fluido para aumentar a pressão, varrendo o óleo na direção dos poços produtores. Já nos métodos de recuperação terciária, ou avançada (\textit{Enhanced Oil Recovery - EOR}), o deslocamento do óleo ocorre pela redução da sua viscosidade, das forças capilares  ou da tensão superficial, sendo classificados em quatro categorias: químicos, miscíveis, térmicos e microbiológicos. Devido a complexidade desses métodos, se faz  necessária a aplicação de modelos mais acurados de simulação como o composicional, que consiste na modelagem do transporte dos componentes pelas fases.}
+    \item<3-> Problema do tempo de simulação
+    \item<4-> Métodos de Transferência de escala: \textit{Upscaling}, Multiescala, ADM (\textit{Algebraic Dynamic Multilevel Method})
+    \item<5-> Método NU-ADM (\textit{Non Uniform Algebraic Dynamic Multilevel Method})
 \end{itemize}
 \end{frame}
 
@@ -196,13 +204,13 @@
 % \subsection{Geral}
 \begin{frame}{Objetivos}
 
-    \begin{block}{Geral}
+    \begin{block}<1->{Geral}
         \begin{itemize}
-            \item Desenvolver uma bliblioteca na libguagem Python que realize a transferência de escala, aplicando o método ADM não uniforme (NU-ADM) em modelos que lidam com escoamento composicional.
+            \item Desenvolver uma bliblioteca na linguagem Python que realize a transferência de escala, aplicando o método ADM não uniforme (NU-ADM) em modelos que lidam com escoamento composicional.
         \end{itemize}
     \end{block}
 
-    \begin{block}{Específicos}
+    \begin{block}<2->{Específicos}
         \begin{itemize}
             \item Desenvolver um interpretador os dados do reservatório
             \item Aplicar o método NU-ADM no modelo composicional IMPEC
@@ -247,35 +255,6 @@
 
 % \end{frame}
 
-\begin{frame}{Lei de Darcy}
-    % Generalizando:
-    \begin{equation}
-        \velocity = -\permTensor \dfrac{1}{\mu} (\grad{p} - \grad{D})
-    \end{equation}
-    
-    \vspace{0.3cm}
-    
-    \begin{description}[]
-        \item $\permTensor$ : tensor permeabilidade da rocha;
-        \item $\velocity$: velocidade do fluido;
-        \item $p$: pressão do fluido;
-        \item $\mu$: viscosidade do fluido;
-        \item $D$: altura do fluido
-    \end{description}
-    
-    \begin{textblock*}{.5\paperwidth}(6cm,5cm)
-        \begin{align*}
-            \permTensor = 
-            \begin{bmatrix}
-            	K_{xx} & K_{xy} & K_{xz} \\
-            	K_{yx} & K_{yy} & K_{yz} \\
-            	K_{zx} & K_{zy} & K_{zz}
-	        \end{bmatrix}
-        \end{align*}
-    \end{textblock*}
-    
-\end{frame}
-
 \subsection{Método dos volumes finitos}
 % \begin{frame}{Método dos volumes finitos}
 % \begin{figure}[!ht]
@@ -316,13 +295,16 @@
 
 \begin{columns}
 \begin{column}{0.6\textwidth}
-Equação do balanço de massa na forma integral:
+% Equação do balanço de massa na forma integral:
+Balanço de massa:
   \begin{equation}
 	\label{eq:volumes_finitos.1}
 	\int_{V} \pd{\rho}{t} dV = \int_{V} - \div{(\rho \velocity)} dV + \int_{V} Q dV
 \end{equation}
 
-Aplicando o teorema da divergência de Gauss na segunda integral de \eqref{eq:volumes_finitos.1} \cite{Souza2015}:
+% Aplicando o teorema da divergência de Gauss na segunda integral de \eqref{eq:volumes_finitos.1} \cite{Souza2015}:
+
+Teorema da divergência de Gauss:
 
  \begin{equation}
 	 \label{eq:volumes_finitos.2}
@@ -352,6 +334,35 @@ Aplicando o teorema da divergência de Gauss na segunda integral de \eqref{eq:vo
 
 \end{frame}
 
+\begin{frame}{Lei de Darcy}
+    % Generalizando:
+    \begin{equation}
+        \velocity = -\permTensor \dfrac{1}{\mu} (\grad{p} - \grad{D})
+    \end{equation}
+    
+    \vspace{0.3cm}
+    
+    \begin{description}[]
+        \item $\permTensor$ : tensor permeabilidade da rocha;
+        \item $\velocity$: velocidade do fluido;
+        \item $p$: pressão do fluido;
+        \item $\mu$: viscosidade do fluido;
+        \item $D$: altura do fluido
+    \end{description}
+    
+    \begin{textblock*}{.5\paperwidth}(6cm,5cm)
+        \begin{align*}
+            \permTensor = 
+            \begin{bmatrix}
+            	K_{xx} & K_{xy} & K_{xz} \\
+            	K_{yx} & K_{yy} & K_{yz} \\
+            	K_{zx} & K_{zy} & K_{zz}
+	        \end{bmatrix}
+        \end{align*}
+    \end{textblock*}
+    
+\end{frame}
+
 
 
 \subsection{Modelo Composicional}
@@ -359,17 +370,18 @@ Aplicando o teorema da divergência de Gauss na segunda integral de \eqref{eq:vo
 \begin{frame}{Simplificações}
     \begin{itemize}
         \item Escoamento isotérmico;
-        \item Equilíbrio termodinâmico local entre as fases;
-        \item Ausência do termo de pressão capilar;
-        \item Ausência do termo de gravidade;
+        % \item Equilíbrio termodinâmico local entre as fases;
+        % \item Ausência do termo de pressão capilar;
+        % \item Ausência do termo de gravidade;
+        \item Ausência dos termos de pressão capilar e gravidade.
         \item A velocidade é dada pela Lei de Darcy;
-        \item O componente água é imiscível;
+        \item A água é imiscível e sua viscosidade é constante;
         \item O meio está totalmente saturado;
-        \item Rocha pouco compressível;
-        \item Não há reacão química entre os fluidos;
-        \item Não há interação entre rocha e fluido;
-        \item Não há o fenômeno de dispersão;
-        \item A viscosidade da fase água é constante;
+        % \item Rocha pouco compressível;
+        % \item Não há reacão química entre os fluidos;
+        \item Não há interação entre rocha e fluido, fenômeno de dispersão e reação química;
+        % \item Não há o fenômeno de dispersão;
+        % \item A viscosidade da fase água é constante;
         \item São consideradas 3 fases: água, óleo e gás.
     \end{itemize}
     
@@ -386,7 +398,9 @@ Aplicando o teorema da divergência de Gauss na segunda integral de \eqref{eq:vo
 %     \end{column}
 % \end{columns}
     
-    Nesse trabalho foi utilizada a equação de Peng-Robinson dada por \cite{Chen2007}:
+    % Nesse trabalho foi utilizada a equação de Peng-Robinson dada por \cite{Chen2007}:
+    Equação de Peng-Robinson:
+
     \begin{equation}
         \label{eq:eos.1}
         \pressure_{\phase} = \dfrac{\rConstant \temperature}{\molarphaseVolume - \bPhase} - \dfrac{\aPhase}{\molarphaseVolume(\molarphaseVolume + \bPhase) + \bPhase(\molarphaseVolume - \bPhase)}
@@ -577,7 +591,8 @@ Aplicando o teorema da divergência de Gauss na segunda integral de \eqref{eq:vo
         \sum_{\phase}^{\numberOfPhases} \Saturation_{\phase} = 1, \hspace{0.5cm} \sum_{\component}^{\numberOfComponents} \molarPartialFrac_{\component \oilPhase} = 1, \hspace{0.5cm} \sum_{\component}^{\numberOfComponents} \molarPartialFrac_{\component \gasPhase} = 1.
     \end{equation}
 
-    A fim de garantir equilíbrio termodinâmico entre as fases:
+    % A fim de garantir equilíbrio termodinâmico entre as fases:
+    Equilíbrio termodinâmico:
 
     \begin{equation}
         \label{eq:modelo_mat.8}
@@ -608,32 +623,53 @@ Aplicando o teorema da divergência de Gauss na segunda integral de \eqref{eq:vo
 % \end{frame}
 
 \subsection{Métodos de Transferência de escala}
-\begin{frame}{Transferência de escala}
+% \begin{frame}{Transferência de escala}
 
-    \begin{columns}
-        \begin{column}{0.5\textwidth}
-            \centering
-            \resizebox*{5cm}{!}{
-            \input{./imgs/upscaling.tex}}
+%     \begin{columns}
+%         \begin{column}{0.5\textwidth}
+%             \centering
+%             \resizebox*{5cm}{!}{
+%             \input{./imgs/upscaling.tex}}
 
-            \textit{\small Upscaling}
+%             \textit{\small Upscaling}
 
-            \vspace{0.3cm}
+%             \vspace{0.3cm}
 
-            \resizebox*{6.5cm}{!}{
-            \input{./imgs/multiescala_classico.tex}}
+%             \resizebox*{6.5cm}{!}{
+%             \input{./imgs/multiescala_classico.tex}}
 
-            {\small Multiescala}
-        \end{column}
+%             {\small Multiescala}
+%         \end{column}
         
-        \begin{column}{0.5\textwidth}
-            \centering
-            \resizebox*{6cm}{!}{
-            \input{./imgs/multilevel_img.tex}}
+%         \begin{column}{0.5\textwidth}
+%             \centering
+%             \resizebox*{6cm}{!}{
+%             \input{./imgs/multilevel_img.tex}}
 
-            {\small ADM}
-        \end{column}
-    \end{columns}
+%             {\small ADM}
+%         \end{column}
+%     \end{columns}
+    
+% \end{frame}
+
+\begin{frame}{Transferência de escala: {\small \textit{Upscaling}}}
+    \centering
+    \resizebox*{7cm}{!}{
+    \input{./imgs/upscaling.tex}}
+    
+\end{frame}
+
+\begin{frame}{Transferência de escala: {\small {Multiescala}}}
+    \centering
+    \resizebox*{9cm}{!}{
+        \input{./imgs/multiescala_classico.tex}}
+    
+\end{frame}
+
+\begin{frame}{Transferência de escala: {\small ADM}}
+    \centering
+    \resizebox*{9cm}{!}{
+        \input{./imgs/multilevel_img.tex}}
     
 \end{frame}
 
@@ -690,10 +726,29 @@ Aplicando o teorema da divergência de Gauss na segunda integral de \eqref{eq:vo
     \end{figure}
 \end{frame}
 
+% \begin{frame}{Método Multiescala}
+%     \justify
+    
+%     \small 
+%     O Operador de Prolongamento ($\prolOperator$) é responsável por realizar o \textit{downscaling} das informações da malha grossa, e é encontrado a partir do cáculo das funções de base ($\basisFunctionIi$) dado por \cite{Zhou2012, Wang2014}:
+
+%     \begin{equation}
+%         \label{eq:multiescala.1}
+%         \begin{cases}
+%             \div{\left( \totalMobility \permTensor \grad{\basisFunctionIi} \right)} = 0 & \text{em } \volDual\\
+%             \vec{\nabla}_{\parallel} \cdot \left( \totalMobility \permTensor \grad{\basisFunctionIi} \right)_{\parallel} = 0 & \text{em } \boundaryVolDual\\
+%             \basisFunctionIi \left( x^{k}\right) = \kroneckerDelta_{Ik},
+%         \end{cases}
+%     \end{equation}
+
+%     onde $\boundaryVolDual$ é o contorno do volume dual $\volDual$, $\parallel$ indica a componente tangencial do fluxo em $\partial \volDual$, $x^{k}$ é o volume que é vértice da malha grossa dual e $\kroneckerDelta_{Ik}$ é o delta de Kronecker aplicado em $x^{k}$. Nesse trabalho foram adotadas as condições de contorno reduzidas \cite{Arthur_diss,Mazlumi_2021}.
+% \end{frame}
+
 \begin{frame}{Método Multiescala}
+    \justify
     
     \small 
-    O Operador de Prolongamento ($\prolOperator$) é responsável por realizar o \textit{downscaling} das informações da malha grossa, e é encontrado a partir do cáculo das funções de base ($\basisFunctionIi$) dado por \cite{Zhou2012, Wang2014}:
+    Operador de Prolongamento:
 
     \begin{equation}
         \label{eq:multiescala.1}
@@ -704,7 +759,31 @@ Aplicando o teorema da divergência de Gauss na segunda integral de \eqref{eq:vo
         \end{cases}
     \end{equation}
 
-    onde $\boundaryVolDual$ é o contorno do volume dual $\volDual$, $\parallel$ indica a componente tangencial do fluxo em $\partial \volDual$, $x^{k}$ é o volume que é vértice da malha grossa dual e $\kroneckerDelta_{Ik}$ é o delta de Kronecker aplicado em $x^{k}$. Nesse trabalho foram adotadas as condições de contorno reduzidas \cite{Arthur_diss,Mazlumi_2021}.
+    % \begin{textblock*}{5cm}(0.5cm,7cm) % {block width} (coords)
+    %     \resizebox*{4.25cm}{!}{           \input{./imgs/im15.tex}}    
+    % \end{textblock*}
+
+    \begin{itemize}
+        \item $\parallel$: Direção tangencial do fluxo
+        \item $\basisFunction$: Função de base
+        \item $x^{k}$: Vértice da malha dual
+    \end{itemize}
+    
+    \begin{textblock*}{5cm}(6.2cm,6.4cm) % {block width} (coords)
+        % \resizebox*{4cm}{!}{           \input{./imgs/im15.tex}}
+        \centering
+        \includegraphics[scale=0.25]{./imgs/op_example.png}
+        
+        {\small Fonte: \cite{Hajibeygi_2020}}
+    \end{textblock*}
+
+    
+    
+    
+
+    
+
+    
 \end{frame}
 
 % \begin{frame}{Método Multiescala}
@@ -719,7 +798,9 @@ Aplicando o teorema da divergência de Gauss na segunda integral de \eqref{eq:vo
 % \end{frame}
 
 \begin{frame}{Método Multiescala}
-    O operador de restrição utilizado nesse trabalho, que é responsável por realizar o \textit{Upscaling} das informações, é o operador clássico de volumes finitos, dado por \cite{Tene_2016}:
+    \justify
+    % O operador de restrição utilizado nesse trabalho, que é responsável por realizar o \textit{Upscaling} das informações, é o operador clássico de volumes finitos, dado por \cite{Tene_2016}:
+    Operador de Restrição:
 
     \begin{equation}
         \label{eq:multiescala.11}
@@ -729,6 +810,13 @@ Aplicando o teorema da divergência de Gauss na segunda integral de \eqref{eq:vo
             0 & \text{ caso contrário }
         \end{cases}.
     \end{equation}
+
+    \input{./imgs/im10_2.tex}
+    
+    \begin{textblock*}{5cm}(3cm,6.3cm) % {block width} (coords)
+        \input{./imgs/im12_2.tex}
+    \end{textblock*}
+
 \end{frame}
 
 \begin{frame}{Método Multiescala}
@@ -750,41 +838,49 @@ Aplicando o teorema da divergência de Gauss na segunda integral de \eqref{eq:vo
     \end{description}
 \end{frame}
 
+% \begin{frame}{Método Multiescala}
+    
+%     \small
+    
+%     \begin{itemize}
+%         \justifying
+%         \item Devido a imposição de desacoplamento para construção do operador de prolongamento, a pressão multiescala não garante conservação da massa em todos os volumes da malha fina, fazendo-se necessária a reconstrução da velocidade \cite{Moyner_2014,Jenny2003}.
+%         \item Para esse fim, calcula-se o fluxo localmente, em cada volume da malha grossa primal, utilizando o fluxo do campo de pressão multiescala como condição de contorno.
+%     \end{itemize}
+    
+
+    
+
+%     % \begin{equation}
+%     %     \label{eq:5_5_4.1}
+%     %     \begin{cases}
+%     %       (K \lambda_{T} \grad{\mathbf{P}''}) \cdot \vec{n} = (K \lambda_{T} \grad{\vectorMsPressure}) \text{ em } \partial \Omega_{I}\\
+%     %       \div{K \lambda_{T} \grad{\mathbf{P}''}} = q \text{ em } \Omega_{I}\\
+%     %     \end{cases}
+%     %   \end{equation}
+
+%     %   \begin{columns}
+%     %     \begin{column}{0.5\textwidth}
+%     %         \begin{description}[]
+%     %             \item $\lambda_{T}$: mobilidade total do fluido = $\sum_{\phase} \lambda_{\phase}$ ;
+%     %             \item $\lambda$: mobilidade do fluido = $\nicefrac{k_{r}}{\mu}$;
+%     %             \item $k_r$: permeabilidade relativa 
+%     %           \end{description}
+%     %     \end{column}
+%     %     \begin{column}{0.5\textwidth}
+%     %         \begin{description}[]
+%     %             \item $\partial \Omega_{I}$: Contorno do volume $\Omega_{I}$ 
+%     %           \end{description}
+%     %     \end{column}
+
+%     %   \end{columns}
+% \end{frame}
+
 \begin{frame}{Método Multiescala}
-    
-    \small
-    
     \begin{itemize}
-        \item Devido a imposição de desacoplamento para construção do operador de prolongamento, a pressão multiescala não garante conservação da massa em todos os volumes da malha fina, fazendo-se necessária a reconstrução da velocidade \cite{Moyner_2014,Jenny2003}.
-        \item Para esse fim, calcula-se o fluxo localmente, em cada volume da malha grossa primal, utilizando o fluxo do campo de pressão multiescala como condição de contorno.
+        \item Recuperação do fluxo.
     \end{itemize}
     
-
-    
-
-    % \begin{equation}
-    %     \label{eq:5_5_4.1}
-    %     \begin{cases}
-    %       (K \lambda_{T} \grad{\mathbf{P}''}) \cdot \vec{n} = (K \lambda_{T} \grad{\vectorMsPressure}) \text{ em } \partial \Omega_{I}\\
-    %       \div{K \lambda_{T} \grad{\mathbf{P}''}} = q \text{ em } \Omega_{I}\\
-    %     \end{cases}
-    %   \end{equation}
-
-    %   \begin{columns}
-    %     \begin{column}{0.5\textwidth}
-    %         \begin{description}[]
-    %             \item $\lambda_{T}$: mobilidade total do fluido = $\sum_{\phase} \lambda_{\phase}$ ;
-    %             \item $\lambda$: mobilidade do fluido = $\nicefrac{k_{r}}{\mu}$;
-    %             \item $k_r$: permeabilidade relativa 
-    %           \end{description}
-    %     \end{column}
-    %     \begin{column}{0.5\textwidth}
-    %         \begin{description}[]
-    %             \item $\partial \Omega_{I}$: Contorno do volume $\Omega_{I}$ 
-    %           \end{description}
-    %     \end{column}
-
-    %   \end{columns}
 \end{frame}
 
 % \begin{frame}{Método Multiescala}
@@ -794,22 +890,23 @@ Aplicando o teorema da divergência de Gauss na segunda integral de \eqref{eq:vo
 
 \begin{frame}{Método ADM}
     \small
-    A transferência de escala para o nível superior ($l$) é feita utilizando os operadores ADM da seguinte forma \cite{Cusini2016}:
+    % A transferência de escala para o nível superior ($l$) é feita utilizando os operadores ADM da seguinte forma \cite{Cusini2016}:
+    Operadores ADM \cite{Cusini2016}:
 
     \begin{equation}
         \label{eq:multinivel.1}
-    (\prolOperatorAdm)^{l}_{l-1} (i,j) =
+    (\prolOperatorAdm)^{1}_{0} (i,j) =
         \begin{cases}
-            (\prolOperator)^{l}_{l-1} (i,j) \text{ se o volume pertence ao próximo nível}\\
+            (\prolOperator)^{1}_{0} (i,j) \text{ se o volume pertence ao próximo nível}\\
             \delta_{ij} \text{ caso contrário},\\
         \end{cases}
     \end{equation}
 
     \begin{equation}
         \label{eq:multinivel.2}
-    (\restOperatorAdm)^{l-1}_{l} (i,j) =
+    (\restOperatorAdm)^{0}_{1} (i,j) =
         \begin{cases}
-            (\restOperator)^{l-1}_{l} (i,j) \text{ se o volume foi pertence ao próximo nível}\\
+            (\restOperator)^{0}_{1} (i,j) \text{ se o volume pertence ao próximo nível}\\
             \delta_{ij} \text{ caso contrário}.\\
         \end{cases}
     \end{equation}
@@ -861,14 +958,14 @@ Aplicando o teorema da divergência de Gauss na segunda integral de \eqref{eq:vo
         \begin{subfigure}{.48\textwidth}
             \centering
             \resizebox*{5cm}{!}{
-            \input{./imgs/adm2.tex}}
+            \input{./imgs/adm5.tex}}
             \subcaption{Método ADM}
             \label{fig:multinivel.3.a}
         \end{subfigure}
         \begin{subfigure}{.48\textwidth}
             \centering
             \resizebox*{5cm}{!}{
-            \input{./imgs/adm4.tex}}
+            \input{./imgs/adm6.tex}}
             \subcaption{Método NU-ADM}
             \label{fig:multinivel.3.b}
         \end{subfigure}
@@ -881,16 +978,17 @@ Aplicando o teorema da divergência de Gauss na segunda integral de \eqref{eq:vo
 \begin{frame}{Seleção dos níveis}
     \small
     \begin{itemize}
-        \item Os volumes da malha grossa que possuírem algum volume com valores prescritos de vazão ou pressão, serão mantidos inteiramente no menor nível, ou seja, na malha fina, a fim de capturar melhor os gradientes de pressão nessa região.
-        \item Será definido um valor limite ($\Delta \Saturation_{lim}$) pelo usuário para o qual será calculada a variação de saturação das fases ($\Delta \Saturation$) entre os volumes da malha fina adjacentes por face. Caso essa variação de saturação ultrapasse o valor definido pelo usuário, ambos volumes serão mantidos na malha fina.
-        \item Em alguns passos de tempo pode acontecer de algum volume da malha fina apresentar o número de mols negativo, com valor próximo de zero. Nessa situação, esse volume e seus vizinhos são mantidos na malha fina para o próximo passo de tempo e o número de mols é mantido como zero, sendo atualizado no próximo passo de tempo.
+        \justifying
+        \item Volumes com prescrições;
+        \item $\Delta \Saturation_{lim}$;
+        \item Número de mols negativo.
     \end{itemize}
 \end{frame}
 
 \begin{frame}{Operador de Prolongamento}
     \small
     \begin{itemize}
-        \item O operador de prolongamento foi construído segundo o método AMS (\textit{Algebraic Multiscale Solver}) \cite{Wang2015,Moyner_2014}
+        \item  Método AMS (\textit{Algebraic Multiscale Solver}) \cite{Wang2015}
     \end{itemize}
 
     \begin{figure}[!ht]
@@ -918,6 +1016,62 @@ Aplicando o teorema da divergência de Gauss na segunda integral de \eqref{eq:vo
         \label{fig:multiescala.4}
     \end{figure}
 
+    \newcommand{\deltaimg}{3.8cm}
+    \newcommand{\deltaimgg}{3.65cm}
+    \newcommand{\deltaimggg}{0.25cm}
+
+    \begin{textblock*}{5cm}(5.7cm,4.1cm-\deltaimggg)
+        F
+    \end{textblock*}
+
+    \begin{textblock*}{5cm}(7.2cm,4.1cm-\deltaimggg)
+        A
+    \end{textblock*}
+
+    \begin{textblock*}{5cm}(7.8cm,4.1cm-\deltaimggg)
+        V
+    \end{textblock*}
+
+    \begin{textblock*}{5cm}(4.5cm,5.4cm-\deltaimggg)
+        F
+    \end{textblock*}
+
+    \begin{textblock*}{5cm}(4.5cm,6.9cm-\deltaimggg)
+        A
+    \end{textblock*}
+
+    \begin{textblock*}{5cm}(4.5cm,7.45cm-\deltaimggg)
+        V
+    \end{textblock*}
+
+    \begin{textblock*}{5cm}(5.7cm+\deltaimg,4.1cm-\deltaimggg)
+        F
+    \end{textblock*}
+
+    \begin{textblock*}{5cm}(7.2cm+\deltaimg,4.1cm-\deltaimggg)
+        A
+    \end{textblock*}
+
+    \begin{textblock*}{5cm}(7.8cm+3.65cm,4.1cm-\deltaimggg)
+        V
+    \end{textblock*}
+
+    \begin{textblock*}{5cm}(4.5cm+\deltaimgg,5.4cm-\deltaimggg)
+        F
+    \end{textblock*}
+
+    \begin{textblock*}{5cm}(4.5cm+\deltaimgg,6.9cm-\deltaimggg)
+        A
+    \end{textblock*}
+
+    \begin{textblock*}{5cm}(4.5cm+\deltaimgg,7.45cm-\deltaimggg)
+        V
+    \end{textblock*}
+
+    \begin{textblock*}{5cm}(0.5cm,7.8cm)
+        \includegraphics[scale=0.3]{./imgs/dual_min.png}
+    \end{textblock*}
+
 \end{frame}
 
 \begin{frame}{Atualização das funções de base}
@@ -934,9 +1088,9 @@ Aplicando o teorema da divergência de Gauss na segunda integral de \eqref{eq:vo
 \begin{frame}{Método de solução da pressão e composições}
 
     \begin{itemize}
-        \item O cálculo da pressão é realizada de acordo com \citeonline{Zhou2012}, utilizando o \textit{solver} de Richardson;
-        \item No \textit{solver} de Richardson, nas iterações intermediárias, o operador de restrição é o transposto do operador de prolongamento.
-        \item A solução explícita do transporte é resolvida na malha fina, e, como é de suma importância que o campo de pressão seja conservativo, na última iteração utiliza-se o operador de restrição de volumes finitos. 
+        \justifying
+        \item<1-> O cálculo da pressão é realizada de acordo com \citeonline{Zhou2012} (\textit{Two Stage Algebraic Multiscale Solver});
+        \item<2-> Solução explícita do transporte resolvida na malha fina. 
     \end{itemize}
     
 \end{frame}
@@ -953,12 +1107,64 @@ Aplicando o teorema da divergência de Gauss na segunda integral de \eqref{eq:vo
 \begin{frame}{Problema \theproblem: Escoamento bidimensional bifásico}
 
     \begin{itemize}
-        \item A malha possui 80x80 volumes
-        \item pressão (P) prescrita no último volume de $13,79MPa$
-        \item vazão (Q) prescrita de injeção de água de $ 3,277 \times 10^{-8} \nicefrac{m^{3}}{s}$ no primeiro volume. 
-        \item O campo de permeabilidade é homogêneo e igual em todas as três direções cartesianas no valor de $4,9346 10^{-13} m^{2}$.
+        \item 80x80 volumes
+        \item Dimensão de $0.00762m$ nas direções x e y.
+        % \item pressão (P) prescrita no último volume de $13,79MPa$
+        % \item vazão (Q) prescrita de injeção de água de $ 3,277 \times 10^{-8} \nicefrac{m^{3}}{s}$ no primeiro volume. 
+        \item Campo de permeabilidade homogêneo no valor de $4,9346 10^{-13} m^{2}$.
         \item Foram aplicadas as razões de engrossamento de 7 e 5.
     \end{itemize}
+    
+    \vspace*{5cm}
+    % cfl: 0.9
+    % dx: 0.00762 , dy: 0.00762, dz: 0.03048
+
+    \begin{textblock*}{6cm}(0.5cm,5cm) % {block width} 
+        \small
+    \begin{table}[!ht]
+        \centering
+        \begin{subtable}{\textwidth}
+            \centering
+            \begin{tabular}{|c|c|c|c|}
+                \hline
+                Massa molar $[\nicefrac{g}{mol}]$ & $142,276$ \\
+                \hline
+                $\criticalT [K]$ & $619,27 $\\
+                \hline
+                $\criticalP[MPa]$ & $2,109$\\
+                \hline
+                Acentricidade & $0,489$\\
+                \hline
+                $\criticalV [\nicefrac{m^{3}}{mol} \times 10^{-4}]$ & $6,03$\\
+                \hline            
+            \end{tabular}
+
+            \vspace{0.3cm}
+
+            {\small Dados do componente hidrocarboneto}
+            \label{tab:table_prob4.c}
+        \end{subtable}
+    \end{table}
+    \end{textblock*}
+
+    \begin{textblock*}{6cm}(7cm,4.8cm)
+        \includegraphics[scale=0.2]{./imgs/prescricao.png}
+
+    \end{textblock*}
+
+    \begin{textblock*}{6cm}(8cm,4.8cm)
+        \footnotesize
+        $ 3,277 \times 10^{-8} \nicefrac{m^{3}}{s}$
+
+    \end{textblock*}
+
+    \begin{textblock*}{6cm}(10.8cm,7.8cm)
+        \footnotesize
+        $13,79MPa$
+
+    \end{textblock*}
+
+
 
     
 \end{frame}
@@ -1073,45 +1279,45 @@ Aplicando o teorema da divergência de Gauss na segunda integral de \eqref{eq:vo
 % \end{table}
 \end{frame}
 % \setcounter{table}{2}
-\begin{frame}{Problema \theproblem}
+% \begin{frame}{Problema \theproblem}
 
-    \begin{columns}
-        \begin{column}{0.5\textwidth}
-            \small
-    \begin{table}[!ht]
-        \centering
-        \begin{subtable}{\textwidth}
-            \centering
-            \begin{tabular}{|c|c|c|c|}
-                \hline
-                Massa molar $[\nicefrac{g}{mol}]$ & $142,276$ \\
-                \hline
-                $\criticalT [K]$ & $619,27 $\\
-                \hline
-                $\criticalP[MPa]$ & $2,109$\\
-                \hline
-                Acentricidade & $0,489$\\
-                \hline
-                $\criticalV [\nicefrac{m^{3}}{mol} \times 10^{-4}]$ & $6,03$\\
-                \hline            
-            \end{tabular}
+%     \begin{columns}
+%         \begin{column}{0.5\textwidth}
+%             \small
+%     \begin{table}[!ht]
+%         \centering
+%         \begin{subtable}{\textwidth}
+%             \centering
+%             \begin{tabular}{|c|c|c|c|}
+%                 \hline
+%                 Massa molar $[\nicefrac{g}{mol}]$ & $142,276$ \\
+%                 \hline
+%                 $\criticalT [K]$ & $619,27 $\\
+%                 \hline
+%                 $\criticalP[MPa]$ & $2,109$\\
+%                 \hline
+%                 Acentricidade & $0,489$\\
+%                 \hline
+%                 $\criticalV [\nicefrac{m^{3}}{mol} \times 10^{-4}]$ & $6,03$\\
+%                 \hline            
+%             \end{tabular}
 
-            \vspace{0.3cm}
+%             \vspace{0.3cm}
 
-            {\small Dados do componente hidrocarboneto}
-            \label{tab:table_prob4.c}
-        \end{subtable}
-    \end{table}
-        \end{column}
-        \begin{column}{0.5\textwidth}
-            \includegraphics[scale=0.25]{./imgs/prescricao.png}
+%             {\small Dados do componente hidrocarboneto}
+%             \label{tab:table_prob4.c}
+%         \end{subtable}
+%     \end{table}
+%         \end{column}
+%         \begin{column}{0.5\textwidth}
+%             \includegraphics[scale=0.25]{./imgs/prescricao.png}
 
-            {\small \hspace{0.5cm}Localização das prescrições}
-        \end{column}
-    \end{columns}
+%             {\small \hspace{0.5cm}Localização das prescrições}
+%         \end{column}
+%     \end{columns}
 
     
-\end{frame}
+% \end{frame}
 
 \newcommand{\FrameProblemName}{Problema \theproblem}
 % \begin{frame}{\FrameProblemName}
@@ -1125,9 +1331,9 @@ Aplicando o teorema da divergência de Gauss na segunda integral de \eqref{eq:vo
 %     \end{figure}
 % \end{frame}
 
-\begin{frame}{\FrameProblemName}
+\begin{frame}{\FrameProblemName: {\small Malha grossa dual}}
     \begin{figure}
-        \caption{Malha dual}
+        % \caption{Malha dual}
         \centering
         \begin{subfigure}{.48\textwidth}
             \centering
@@ -1329,13 +1535,17 @@ Aplicando o teorema da divergência de Gauss na segunda integral de \eqref{eq:vo
 \begin{frame}{\FrameProblemName}
 
     \begin{itemize}
-        \item Escoamento trifásico, 1D e com 6 componentes hidrocarbonetos. 
-        \item A malha possui 512 volumes 
+        \item Escoamento trifásico, 1D, com 6 componentes hidrocarbonetos. 
+        \item A malha possui 512 volumes;
+        \item Dimensão de cada volume de $5,334375 m$ na direção x
         \item Vazão prescrita de injeção de água no primeiro volume de $4.1377 \times 10^{-4} \nicefrac{m^{3}}{s}$. 
-        \item No último volume da malha há pressão prescrita de $8, 96MPa$. 
+        \item No último volume da malha há pressão Pressão prescrita no último volume de $8, 96MPa$. 
         \item O coeficiente de interação binária entre os componentes é zero.
-        \item  Campo de permeabilidade homogêneo e igual em todas as três direções cartesianas no valor de $10^{-14} m^{2}$.
+        \item  Campo de permeabilidade homogêneo no valor de $10^{-14} m^{2}$.
+        \item Foram aplicadas as razões de engrossamento 16, 64 e 100. 
     \end{itemize}
+    % cfl: 0.5
+    % y: 10.66875, z: 10
     
 \end{frame}
 
@@ -1720,13 +1930,13 @@ Aplicando o teorema da divergência de Gauss na segunda integral de \eqref{eq:vo
 \begin{frame}{\FrameProblemName}
     \begin{itemize}
         \item Escoamento 1D com 3 componentes hidrocarbonetos e com duas fases (óleo e gás). 
-        \item A malha possui 5000 volumes 
+        \item 5000 volumes 
         \item Pressão prescrita no primeiro volume de $7MPa$ e composição prescrita de injeção de $0,9$ do componente C1 e $0,1$ do componente C2. 
-        \item No último volume da malha há pressão prescrita de $6MPa$. 
+        \item Pressão prescrita no último volume de $6MPa$. 
         \item O coeficiente de interação binária entre os componentes é zero 
         \item A dimensão dos volumes na direção x é de $0,01m$. 
         \item Campo de permeabilidade homogêneo no valor de $10^{-15} m^{2}$.
-        \item Foram utilizadas as razões de engrossamento de 20, 50 e 100.
+        \item Razões de engrossamento: 20, 50 e 100.
     \end{itemize}
 \end{frame}
 
@@ -2019,7 +2229,7 @@ Aplicando o teorema da divergência de Gauss na segunda integral de \eqref{eq:vo
         \item Desenvolvimento do simulador NU-ADM composicional.
         \item Foram simulados 3 exemplos: um 2D e dois 1D (Problema 2 com 6 componentes e o Problema 3 com 3).
         \item No Problema 1 foi possível verificar a adaptação da malha.
-        \item No Problema 2, noutou-se melhor performance com uma razão de engrossamento intermediária, mesmo atualizando as funções de base.
+        \item No Problema 2, notou-se melhor performance com uma razão de engrossamento intermediária.
         \item No Problema 3 todas as soluções NU-ADM se aproximaram da malha fina, mas atualizar as funções de base não melhorou significativamente os resultados.
     \end{itemize}
 

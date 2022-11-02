@@ -8,8 +8,8 @@
 
   \node (start) [startstop] {Passo de tempo n+1};
   \node (proc0) [process, below of=start] {Calcular a pressão implicitamente};
-  \node (proc1) [process, below of=proc0] {Calcular a velocidade e o número de mols de cada componente explicitamente};
-  \node (proc2) [process, below of=proc1, yshift=-0.4cm] {Realizar o teste de estabilidade de fase, cálculo do flash e cálculo das propriedades};
+  \node (proc1) [process, below of=proc0] {Calcular a velocidade e o número de mols de explicitamente};
+  \node (proc2) [process, below of=proc1, yshift=-0.4cm] {Teste de estabilidade, cálculo do flash e das propriedades};
   \node (end) [startstop, below of=proc2,yshift=-0.4cm] {Ir para o próximo passo de tempo};
   
   
